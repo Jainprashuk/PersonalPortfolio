@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="footer border z-10 border-t-[#33353F] border-l-transparent border-r-transparent text-white">
       <div className="container p-12 flex justify-between items-center">
-        <span>JainPrashuk.in</span>
+        {/* <span>JainPrashuk.in</span> */}
         <div className="flex space-x-4">
           <a href="https://www.instagram.com/29prashuk_jain/?igshid=YzVkODRmOTdmMw%3D%3D">
             <svg
