@@ -34,7 +34,7 @@ const Navbar = () => {
       <div className="flex container lg:py-4 flex-wrap items-center justify-between mx-auto px-4 py-2">
         
 
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center text-gray-100">
 
         <Link
           href={"/"}
