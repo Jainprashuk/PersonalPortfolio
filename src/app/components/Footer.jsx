@@ -73,7 +73,7 @@ const Footer = () => {
           </a>
 
         </div>
-        <p className="text-slate-600">All rights reserved.</p>
+        {/* <p className="text-slate-600">All rights reserved.</p> */}
       </div>
     </footer>
   );
