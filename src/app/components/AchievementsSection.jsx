@@ -15,12 +15,12 @@ const achievementsList = [
     value: "10+",
     postfix: "+",
   },
-  {
-    // prefix: "~",
-    metric: "Reach",
-    value: "100,0",
-    postfix: "+",
-  },
+  // {
+  //   // prefix: "~",
+  //   metric: "Reach",
+  //   value: "1000",
+  //   postfix: "+",
+  // },
   {
     metric: "Certificates",
     value: "10",
