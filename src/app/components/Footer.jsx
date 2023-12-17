@@ -58,7 +58,7 @@ const Footer = () => {
             </svg>
           </a>
 
-          <a href="https://wa.me/6265831996?text=Hey there , can we talk.." target="_blank">
+          <a href="https://wa.me/916265831996?text=Hey there , can we talk.." target="_blank">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
