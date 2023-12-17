@@ -1,4 +1,3 @@
-import React from "react";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 import AboutSection from "./components/AboutSection";
@@ -19,38 +18,8 @@ export default function Home() {
         <ProjectsSection />
         <CertificateSection/>
         <EmailSection />
-        
-        {/* Placeholder div for the chatbot */}
-        <div id="chatbot-container"></div>
-
-        {/* Button to load chatbot on the client-side */}
-        <button
-          id="chatbot-toggle-button"
-          className="chatbot-toggle-button"
-          onClick={loadChatbot}
-        >
-          Show Chatbot
-        </button>
       </div>
       <Footer />
     </main>
   );
-}
-
-// Function to load the chatbot on the client-side
-function loadChatbot() {
-  // Dynamically create an iframe for the chatbot
-  const iframe = document.createElement("iframe");
-  iframe.title = "Chatbot";
-  iframe.src = "path_to_your_chatbot_iframe";
-  iframe.width = "300"; // Set your preferred width
-  iframe.height = "400"; // Set your preferred height
-  iframe.frameBorder = "0";
-  iframe.allowFullScreen = true;
-  iframe.className = "chatbot-iframe";
-
-  // Append the iframe to the container div
-  const container = document.getElementById("chatbot-container");
-  container.innerHTML = '';
-  container.appendChild(iframe);
 }
