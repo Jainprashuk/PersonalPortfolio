@@ -17,8 +17,12 @@ export default function RootLayout({ children }) {
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
         <meta name="google-site-verification" content="mXc67d_o5hrbfn1Nh3NakAYEHeurLQTnPaTzP9fCo-g" />
+        
         {/* You can add more metadata here like OpenGraph tags, Twitter cards, etc. */}
       </Head>
+
+      
+
       <body className={inter.className}>{children}</body>
     </html>
   );  
