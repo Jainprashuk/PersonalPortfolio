@@ -62,7 +62,7 @@ const AchievementsSection = () => {
               </h2>
               <p className="text-[#ADB7BE] text-base">{achievement.metric}</p>
             </div>
-          );
+          );   
         })}
       </div>
     </div>
