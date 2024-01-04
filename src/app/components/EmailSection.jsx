@@ -62,6 +62,9 @@ const EmailSection = () => {
           open. Whether you have a question or just want to say hi, I&apos;ll
           try my best to get back to you!
         </p>
+        <p className="text-[#ADB7BE] mb-4 max-w-md">
+          Feel Free To Give Suggestions About My PortFolio Website 
+        </p>
       </div>
       <div>
         <form className="flex flex-col form" onSubmit={(e) => Submit(e)}>
