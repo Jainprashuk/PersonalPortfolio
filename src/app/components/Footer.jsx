@@ -6,7 +6,9 @@ const Footer = () => {
       <div className="container p-12 flex justify-between items-center">
         {/* <span>JainPrashuk.in</span> */}
         <div className="flex space-x-4">
-          <a href="https://www.instagram.com/29prashuk_jain/?igshid=YzVkODRmOTdmMw%3D%3D">
+          <a href="https://www.instagram.com/29prashuk_jain/?igshid=YzVkODRmOTdmMw%3D%3D"
+            title="Hey EveryOne , I am Prashuk Jain ,  This is my Instagram profile"
+            >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"

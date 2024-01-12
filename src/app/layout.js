@@ -8,7 +8,8 @@ export const metadata = {
   title: 'JainPrashuk',
   description:
     'Welcome to JainPrashuk homepage. Discover more about my journey in engineering and development. i am Third-year engineering student at Lovely Professional University in Punjab, passionate about becoming a full-stack developer. Eager to learn, apply skills to real projects, and a strong team player.',
-  keywords: ['engineering student', 
+  keywords: ['engineering student',
+  'personal portfolio' ,
   'full-stack developer', 
   'Lovely Professional University', 
   'prashuk jain', 
@@ -16,6 +17,7 @@ export const metadata = {
   'ieeecislpu', 
   'chegg expert', 
   'prashuk jain lpu', 
+  'prashuk jain', 
   'front end developer', 
   'lpu', 
   'codeleagalis', 
