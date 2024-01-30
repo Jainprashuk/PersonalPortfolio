@@ -28,8 +28,8 @@ const achievementsList = [
   },
   {
     metric: "CGPA",
-    value: "7.7",
-    postfix: "",
+    value: "7",
+    postfix: ".7",
   },
 ];
 
