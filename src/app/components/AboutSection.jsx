@@ -24,7 +24,7 @@ const TAB_DATA = [
     id: "education",
     content: (
       <ul className="list-disc pl-2">
-        <li>BTECH-CSE - LPU  ( 7.8 CGPA )</li>
+        <li>BTECH-CSE - LPU  ( 7.7 CGPA )</li>
         <li>XII - CBSE ( 78% )</li>
         <li>X - CBSE ( 79% )</li>
       </ul>
