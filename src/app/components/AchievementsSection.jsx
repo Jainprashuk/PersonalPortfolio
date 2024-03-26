@@ -15,12 +15,12 @@ const achievementsList = [
     value: "10",
     postfix: "+",
   },
-  // {
-  //   // prefix: "~",
-  //   metric: "Reach",
-  //   value: "1000",
-  //   postfix: "+",
-  // },
+  {
+    // prefix: "~",
+    metric: "Patents Published",
+    value: "1",
+    postfix: "",
+  },
   {
     metric: "Certificates",
     value: "10",

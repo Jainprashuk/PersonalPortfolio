@@ -10,10 +10,11 @@ const TAB_DATA = [
     content: (
       <ul className="list-disc pl-2">
         <li>Data Structures & Algorithm</li>
-        <li>Languages : Cpp(Primary) , javascript & C</li>
-        <li>HTML , CSS & Javascript</li>
-        <li>React(Primary) & Angular</li>
+        <li>Languages : Cpp(Primary) , javascript , python & C</li>
+        <li>HTML , CSS , Javascript & Typescript</li>
+        <li>React(Primary) , NextJs & Angular</li>
         <li>Tailwind & Bootstrap</li>
+        <li>NodeJs , Express & MongoDb</li>
         <li>Graphic Design : Adobe Photoshop , Figma & Canva</li>
         <li>Git & GitHub</li>
       </ul>

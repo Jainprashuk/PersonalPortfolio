@@ -5,6 +5,8 @@ import LinkedinIcon from "../../../public/linkedin-icon.svg";
 import Link from "next/link";
 import Image from "next/image";
 
+
+
 const EmailSection = () => {
   function Submit(e) {
     const formEle = document.querySelector("form");
@@ -15,7 +17,7 @@ const EmailSection = () => {
     console.log("submitted");
     const formDatab = new FormData(formEle);
     fetch(
-      "https://script.google.com/macros/s/AKfycbyixDhwEv9Bq4Eu6Q1rEELFHlpgfD83dnqQS1NWxtN8QJCVeG0nfA5ws4vg5HUtdtfr/exec",
+      "https://script.google.com/macros/s/AKfycbxT_T41JW47dYNvXIAIBY0TVx6XcbmeUJ7yh0EbUdCVlRzih2rj7SgFY8DSSK2GtXFH/exec",
       {
         method: "POST",
         body: formDatab,
