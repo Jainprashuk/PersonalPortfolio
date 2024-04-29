@@ -74,7 +74,7 @@ const AchievementsSection = () => {
               </h2>
               <p className="text-[#ADB7BE] text-base">{achievement.metric}</p>
               {index == 0 && (
-                <button onClick={openModal} className="text-sm">
+                <button onClick={openModal} className="text-sm text-gray-50">
                   View Details
                 </button>
               )}
