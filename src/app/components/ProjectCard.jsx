@@ -46,7 +46,7 @@ const ProjectCard = ({
           <button
             onClick={openModal}
             href={previewUrl}
-            className="h-14 w-14 border-2 relative rounded-full border-[#ADB7BE] hover:border-white group/link flex justify-center align-middle"
+            className="h-14 text-gray-100 w-14 border-2 relative rounded-full border-[#ADB7BE] hover:border-white group/link flex justify-center align-middle"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
