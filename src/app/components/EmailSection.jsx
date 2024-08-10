@@ -174,14 +174,14 @@ const EmailSection = () => {
                 id="otp"
                 required
                 className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-1/2 p-2.5"
-                placeholder="Enter Your OTP"
+                placeholder="OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
               />
               <button
   type="button"
   onClick={handleSendOtp}
-  className="bg-primary-500 mx-2  px-6 py-2 hover:bg-primary-600 text-white font-medium rounded-lg"
+  className="bg-primary-500 mx-2  px-6 py-2 hover:bg-primary-600 text-white text-sm md:text-md rounded-lg"
   disabled={loading} // Disable the button when loading
 >
   Send OTP
@@ -207,7 +207,7 @@ const EmailSection = () => {
   )}
 </button>
 
-              <button type="button" onClick={handleVerifyOtp} className="bg-primary-500 mx-2 px-6 py-2 hover:bg-primary-600 text-white font-medium rounded-lg">
+              <button type="button" onClick={handleVerifyOtp} className="bg-primary-500 mx-2 px-6 py-2 hover:bg-primary-600 text-white text-sm md:text-md rounded-lg">
                 Verify OTP
               </button>
             </div>
