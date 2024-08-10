@@ -3,6 +3,7 @@ import React from "react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import "./projectdescription.css";
+import Link from "next/link";
 
 const AnimatedNumbers = dynamic(
   () => {
@@ -31,7 +32,7 @@ const achievementsList = [
   },
   {
     metric: "CGPA",
-    value: "7.7",
+    value: "7.82",
     postfix: "",
   },
 ];
@@ -77,6 +78,27 @@ const AchievementsSection = () => {
                 <button onClick={openModal} className="text-sm text-gray-50">
                   View Details
                 </button>
+              )}
+              {index == 1 && (
+                <Link href="#projects">
+                <button   className="text-sm text-gray-50">
+                  View Projects
+                </button>
+                </Link>
+              )}
+              {index == 2 && (
+                <Link href="#certificates">
+                <button   className="text-sm text-gray-50">
+                  View Certificates
+                </button>
+                </Link>
+              )}
+              {index == 3 && (
+                // <Link >
+                <button   className="text-sm text-gray-50">
+                  View Transcript
+                </button>
+                // </Link>
               )}
               {isModalOpen && (
                 <div className="modal" onClick={closeModal}>

@@ -1,4 +1,3 @@
 // update project descriptions in object
-// ui for project description popup
-// add new project (trello , Certificate hub)
-// patent popup card and details
+// job role proficiency component
+// contacts email validation for spam

@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 import AboutSection from "./components/AboutSection";
@@ -8,6 +11,9 @@ import AchievementsSection from "./components/AchievementsSection";
 import CertificateSection from "./components/CertificationSection";
 
 export default function Home() {
+  const router = useRouter();
+  
+
   return (
     <main className="flex min-h-screen flex-col bg-[#121212]">
       <Navbar />
@@ -16,7 +22,7 @@ export default function Home() {
         <AchievementsSection />
         <AboutSection />
         <ProjectsSection />
-        <CertificateSection/>
+        <CertificateSection />
         <EmailSection />
       </div>
       <Footer />
