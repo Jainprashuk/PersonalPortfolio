@@ -96,46 +96,6 @@ const projectsData = [
     TechStack : "HTML, CSS & JavaScript",
     Learnings : "In this project, my focus and learning revolved around mastering essential data structures and algorithms (DSA) topics. Through my GitHub repository, I showcased a robust collection of DSA examples, explanations, and contributions. This experience deepened my problem-solving skills and underscored my commitment to continuous learning in software development"
   },
-  {
-    id: 10,
-    title: "SkyDine",
-    description: "Order food and drinks seamlessly while traveling by plane.",
-    image: "/images/projects/skydine.png",
-    tag: ["All", "React", "JavaScript", "Node.js", "others"],
-    gitUrl: "https://github.com/Jainprashuk/AlloHealth-SkyDine",
-    previewUrl: "https://allo-health-frontend.vercel.app/",
-    aim: "Imagine you are traveling via plane with your family and looking to order food/drinks. SkyDine aims to provide a mini React application to order food and drinks. The app would show a list of available meals to purchase with drink selection for each meal.",
-    LongDescrption: "SkyDine is a React-based application designed to enhance the in-flight dining experience. It allows users to browse a list of available meals, select optional drinks for each meal, filter meals by tags, and manage meal selections for multiple people. The application calculates the total price of selected items and offers a responsive, user-friendly interface. Additionally, the backend is built with Node.js (preferably Nest.js + TypeScript) to fetch meal data, with features like authentication, pagination, and hosting on a public cloud for enhanced functionality.",
-    TechStack: "React, Redux, NodejS , Mongodb , Express Node.js, Vercel",
-    Learnings: "State management with Redux, building responsive UIs with Material UI, backend API development with Nest.js and TypeScript, authentication integration, and deploying on a public cloud."
-  },
-  
-  {
-    id: 10,
-    title: "Scientific calculator",
-    description: "Project 5 description",
-    image: "/images/projects/6.png",
-    tag: ["All", "others"],
-    gitUrl: "/",
-    previewUrl: "/",
-    aim:"Developing a unified platform combining timer, stopwatch, and clock functionalities into a single interface",
-    LongDescrption : "Create an integrated platform that combines timer, stopwatch, and clock functionalities into a seamless user interface. This unified solution allows users to set timers for specific tasks, utilize a stopwatch for precise timing, and view a digital or analog clock display. The platform will offer intuitive controls and customizable settings, catering to various timing needs efficiently. By consolidating these tools into one platform, users can easily manage time-related activities with convenience and clarity.",
-    TechStack : "Java",
-    Learnings : "Java Concepts"
-  },
-  {
-    id: 11,
-    title: "Task manager trello",
-    description: "Project 5 description",
-    image: "/images/projects/6.png",
-    tag: ["All", "others"],
-    gitUrl: "/",
-    previewUrl: "/",
-    aim:"Developing a unified platform combining timer, stopwatch, and clock functionalities into a single interface",
-    LongDescrption : "Create an integrated platform that combines timer, stopwatch, and clock functionalities into a seamless user interface. This unified solution allows users to set timers for specific tasks, utilize a stopwatch for precise timing, and view a digital or analog clock display. The platform will offer intuitive controls and customizable settings, catering to various timing needs efficiently. By consolidating these tools into one platform, users can easily manage time-related activities with convenience and clarity.",
-    TechStack : "Java",
-    Learnings : "Java Concepts"
-  },
 ];
 
 const ProjectsSection = () => {
