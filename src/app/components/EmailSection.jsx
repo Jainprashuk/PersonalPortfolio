@@ -167,7 +167,7 @@ const EmailSection = () => {
             />
             {
               otpverified  ? (<p className="text-green-500 my-4 text-center">Otp Verified</p>) : (
-                <div className="flex mt-2 justify-center items-center align-middle w-full">
+                <div className="flex mt-2  items-center align-middle w-full">
               <input
                 name="otp"
                 type="number"
