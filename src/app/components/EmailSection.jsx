@@ -16,6 +16,10 @@ const EmailSection = () => {
   
 
   const handleSendOtp = async () => {
+
+    if(!email || email == ""){
+      toast.error("Enter Email First")
+    }
     setLoading(true); // Show loader when starting to send OTP
     try {
       const response = await fetch("https://portfolio-backend-two-zeta.vercel.app/sendotp", {
@@ -44,6 +48,13 @@ const EmailSection = () => {
   
 
   const handleVerifyOtp = async () => {
+
+    if (!email || email=="") {
+      toast.error("Enter Email First")
+    }
+    if (!otp || otp=="") {
+      toast.error("Enter Otp first ")
+    }
     try {
       const response = await fetch("https://portfolio-backend-two-zeta.vercel.app/verifyotp", {
         method: "POST",
@@ -156,13 +167,13 @@ const EmailSection = () => {
             />
             {
               otpverified  ? (<p className="text-green-500 my-4 text-center">Otp Verified</p>) : (
-                <div className="flex mt-2 justify-center items-center align-middle">
+                <div className="flex mt-2 justify-center items-center align-middle w-full">
               <input
                 name="otp"
                 type="number"
                 id="otp"
                 required
-                className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
+                className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-1/2 p-2.5"
                 placeholder="Enter Your OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
@@ -170,7 +181,7 @@ const EmailSection = () => {
               <button
   type="button"
   onClick={handleSendOtp}
-  className="bg-primary-500 mx-2 px-5 py-2 hover:bg-primary-600 text-white font-medium rounded-lg"
+  className="bg-primary-500 mx-2  px-6 py-2 hover:bg-primary-600 text-white font-medium rounded-lg"
   disabled={loading} // Disable the button when loading
 >
   Send OTP
@@ -196,7 +207,7 @@ const EmailSection = () => {
   )}
 </button>
 
-              <button type="button" onClick={handleVerifyOtp} className="bg-primary-500 mx-2 px-5 py-2 hover:bg-primary-600 text-white font-medium rounded-lg">
+              <button type="button" onClick={handleVerifyOtp} className="bg-primary-500 mx-2 px-6 py-2 hover:bg-primary-600 text-white font-medium rounded-lg">
                 Verify OTP
               </button>
             </div>
