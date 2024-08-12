@@ -62,7 +62,7 @@ const UserHome = () => {
       <div className=" max-w-screen h-screen p-5  ">
         <div className="max-w-screen">
           {formdata.map((ele) => (
-            <section>
+            <section key={ele._id}>
               <div class="flex items-start mb-10">
               <div class="flex-shrink-0">
                 <div class="inline-block relative">
