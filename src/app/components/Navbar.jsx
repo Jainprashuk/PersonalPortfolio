@@ -24,6 +24,10 @@ const navLinks = [
     title: "Contact Me",
     path: "#contact",
   },
+  {
+    title: "Admin",
+    path: "/Admin/response",
+  },
 ];
 
 const Navbar = () => {
