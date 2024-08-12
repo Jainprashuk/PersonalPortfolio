@@ -1,9 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
-// import NavLink from "./NavLink";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
-// import MenuOverlay from "./MenuOverlay";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 import { TypeAnimation } from "react-type-animation";
