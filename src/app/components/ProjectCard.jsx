@@ -28,9 +28,13 @@ const ProjectCard = ({
     <div className="border  border-2 border-[#ADB7BE] rounded-xl p-4 dark:border-gray-900 h-full">
       <div
         className="h-52 md:h-72 rounded-t-xl relative group"
-        style={{ background: `url(${imgUrl})`, backgroundSize: "cover" , backgroundRepeat:"no-repeat" }}
+        style={{
+          background: `url(${imgUrl})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
       >
-        <div className="overlay items-center gap-2 justify-center absolute top-0 left-0 w-full h-full bg-[#181818] bg-opacity-0 hidden group-hover:flex group-hover:bg-opacity-80 transition-all duration-500 ">
+        <div className="overlay  items-center gap-2 justify-center absolute top-0 left-0 w-full h-full bg-[#181818] bg-opacity-0 hidden group-hover:flex group-hover:bg-opacity-80 transition-all duration-500 ">
           <Link
             href={gitUrl}
             className="h-14 w-14 mr-2 border-2 relative rounded-full border-[#ADB7BE] hover:border-white group/link"
@@ -67,29 +71,57 @@ const ProjectCard = ({
         </div>
       </div>
       <div className="text-white rounded-b-xl mt-3 bg-[#181818]py-6 px-4">
-        <h5 className="text-xl font-semibold mb-2 dark:text-gray-900">{title}</h5>
+        <h5 className="text-xl font-semibold mb-2 dark:text-gray-900">
+          {title}
+        </h5>
         <p className="text-[#ADB7BE] dark:text-gray-900">{description}</p>
         {/* <button onClick={openModal}>click me</button> */}
       </div>
       {isModalOpen && (
-        <div className="modal " onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <span className="close bg-white  p-2 my-auto " onClick={closeModal}>
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="dark:bg-white bg-gray-800 rounded-lg shadow-2xl max-w-7xl w-full md:p-8 p-5 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-semibold focus:outline-none"
+              onClick={closeModal}
+            >
               &times;
-            </span>
-            <h1 className=" text-center p-2 text-4xl  mb-5 rounded-mdm font-extrabold underline underline-offset-4 text-gray-900">{title}</h1>
-            <p className="text-gray-900 text-center text-xl border-2 p-5 rounded-lg mb-5"><span className="text-gray-900 font-bold text-2xl">Aim: <br /> </span> {aim}</p>
-            <p className="text-gray-900  text-xl border-2 p-5 rounded-lg mb-5">
-              <p className="text-gray-900 font-bold text-center text-2xl  ">Description:  <br /> </p> {LongDescrption}
-            </p>
-            <p className="text-gray-900 text-center text-xl border-2 p-5 rounded-lg mb-5">
-              <span className="text-gray-900 font-bold text-2xl">Tech Stack: <br /> </span> {TechStack}
-            </p>
-            <p className="text-gray-900  text-xl border-2 p-5 rounded-lg mb-5">
-               <p className="text-gray-900 text-center font-bold text-2xl"> Learnings: <br /> </p>  {Learnings}
-            </p>
-            
-            
+            </button>
+
+            <h1 className="text-center text-5xl font-extrabold mb-8 text-gray-200 dark:text-gray-800">
+              {title}
+            </h1>
+
+            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
+              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">Aim:</h2>
+              <p className="dark:text-gray-900 text-gray-300">{aim}</p>
+            </div>
+
+            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
+              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
+                Description:
+              </h2>
+              <p className="dark:text-gray-900 text-gray-300">{LongDescrption}</p>
+            </div>
+
+            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
+              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
+                Tech Stack:
+              </h2>
+              <p className="dark:text-gray-900 text-gray-300">{TechStack}</p>
+            </div>
+
+            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg bg-gray-900 dark:bg-gray-50">
+              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
+                Learnings:
+              </h2>
+              <p className="dark:text-gray-900 text-gray-300">{Learnings}</p>
+            </div>
           </div>
         </div>
       )}
@@ -98,5 +130,3 @@ const ProjectCard = ({
 };
 
 export default ProjectCard;
-
-
