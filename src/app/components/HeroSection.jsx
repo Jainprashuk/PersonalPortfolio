@@ -42,8 +42,9 @@ const HeroSection = () => {
             />
           </h1>
           <p className="text-responsive text-[#ADB7BE] text-wrap dark:text-gray-900 text-base sm:text-lg mb-6 lg:text-xl">
-          Driven by innovation, I’m a final-year CS student  and Frontend Engineer Intern at StrideOne, skilled in MERN stack . Let's build smarter web experiences together!</p>
-          <div>
+    Driven by innovation, I am a final-year CS student and Frontend Engineer Intern at StrideOne, skilled in MERN stack. Let&apos;s build smarter web experiences together!
+</p>
+<div>
             <Link
               href="/#contact"
               className="px-6 inline-block py-3 w-full sm:w-fit rounded-full mr-4 bg-gradient-to-br from-primary-500 to-secondary-500 hover:bg-slate-200 text-white"
