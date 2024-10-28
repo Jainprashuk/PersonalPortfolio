@@ -114,23 +114,23 @@ const UserHome = () => {
       
       </></div>
     ) : (
-      <div><section class="bg-gray-50 dark:bg-gray-900">
+      <div><section class="dark:bg-gray-50 bg-gray-900">
       
       <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div className="my-5">
-      <h1 className="text-center text-5xl">Admin Panel</h1>
-      <p className="text-center">(Only For Admins)</p>
+      <h1 className="text-center text-5xl dark:text-gray-900 text-gray-400">Admin Panel</h1>
+      <p className="text-center dark:text-gray-900 text-gray-400">(Only For Admins)</p>
       </div>
-        <div class="w-full  bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div class="w-full  dark:bg-white rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 bg-gray-800 border-gray-700">
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 class="text-xl font-bold leading-tight tracking-tight dark:text-gray-900 text-gray-400 md:text-2xl ">
               Sign in to your account
             </h1>
             <form class="space-y-4 md:space-y-6">
               <div>
                 <label
                   for="email"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium dark:text-gray-900 text-gray-400"
                 >
                   Your email
                 </label>
@@ -138,7 +138,7 @@ const UserHome = () => {
                   type="email"
                   name="email"
                   id="email"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="name@company.com"
                   required=""
                   value={usename}
@@ -148,7 +148,7 @@ const UserHome = () => {
               <div>
                 <label
                   for="password"
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  class="block mb-2 text-sm font-medium dark:text-gray-900 text-gray-400"
                 >
                   Password
                 </label>
@@ -157,7 +157,7 @@ const UserHome = () => {
                   name="password"
                   id="password"
                   placeholder="••••••••"
-                  class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  class="dark:bg-gray-50 border dark:placeholder-gray-700 dark:text-gray-900 border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  dark:border-gray-600   dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required=""
                   value={password}
                   onChange={(Event)=>handleonchangepass(Event)}
@@ -166,7 +166,7 @@ const UserHome = () => {
              
               <button
                 // type="submit"
-                class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 "
                 onClick={(Event)=>handleonsubmit(Event)}
               >
                 Sign in

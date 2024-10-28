@@ -56,13 +56,13 @@ const AchievementsSection = () => {
               key={index}
               className="flex flex-col text-center items-center justify-center mx-4 my-4 sm:my-0"
             >
-              <h2 className="text-white text-center text-4xl font-bold flex flex-row">
+              <h2 className="text-white dark:text-gray-900 text-center text-4xl font-bold flex flex-row">
                 {achievement.prefix}
                 <AnimatedNumbers
                   includeComma
                   animateToNumber={achievement.value}
                   locale="en-US"
-                  className="text-white text-center text-4xl font-bold"
+                  className="text-white text-center text-4xl font-bold dark:text-gray-900"
                   configs={(_, index) => {
                     return {
                       mass: 1,
@@ -73,29 +73,29 @@ const AchievementsSection = () => {
                 />
                 {achievement.postfix}
               </h2>
-              <p className="text-[#ADB7BE] text-base">{achievement.metric}</p>
+              <p className="text-[#ADB7BE] text-base dark:text-gray-900">{achievement.metric}</p>
               {index == 0 && (
-                <button onClick={openModal} className="text-sm text-gray-50">
+                <button onClick={openModal} className="text-sm text-gray-50 dark:text-gray-500">
                   View Details
                 </button>
               )}
               {index == 1 && (
                 <Link href="#projects">
-                <button   className="text-sm text-gray-50">
+                <button   className="text-sm text-gray-50 dark:text-gray-500">
                   View Projects
                 </button>
                 </Link>
               )}
               {index == 2 && (
                 <Link href="#certificates">
-                <button   className="text-sm text-gray-50">
+                <button   className="text-sm text-gray-50 dark:text-gray-500">
                   View Certificates
                 </button>
                 </Link>
               )}
               {index == 3 && (
                 // <Link >
-                <button   className="text-sm text-gray-50">
+                <button   className="text-sm text-gray-50 dark:text-gray-500">
                   View Transcript
                 </button>
                 // </Link>
