@@ -79,7 +79,7 @@ const ProjectCard = ({
       </div>
       {isModalOpen && (
   <div
-    className="fixed inset-0 my-10 py-7 flex items-center justify-center  bg-opacity-50 z-50"
+    className="fixed inset-0 my-2  flex items-center justify-center bg-gray-300  bg-opacity-70 z-50"
     onClick={closeModal}
   >
     <div
