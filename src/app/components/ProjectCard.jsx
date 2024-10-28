@@ -78,53 +78,49 @@ const ProjectCard = ({
         {/* <button onClick={openModal}>click me</button> */}
       </div>
       {isModalOpen && (
-        <div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-60 z-50"
-          onClick={closeModal}
-        >
-          <div
-            className="dark:bg-white bg-gray-800 rounded-lg shadow-2xl max-w-7xl w-full md:p-8 p-5 relative"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-3xl font-semibold focus:outline-none"
-              onClick={closeModal}
-            >
-              &times;
-            </button>
+  <div
+    className="fixed inset-0 my-10 py-7 flex items-center justify-center  bg-opacity-50 z-50"
+    onClick={closeModal}
+  >
+    <div
+      className="dark:bg-white bg-gray-800 rounded-lg shadow-2xl max-w-3xl w-full md:max-w-7xl md:p-8 p-4 relative mx-2  max-h-full overflow-y-auto"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <button
+        className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl md:text-3xl font-semibold focus:outline-none"
+        onClick={closeModal}
+      >
+        &times;
+      </button>
 
-            <h1 className="text-center text-5xl font-extrabold mb-8 text-gray-200 dark:text-gray-800">
-              {title}
-            </h1>
+      <h1 className="text-center text-3xl md:text-5xl font-extrabold mb-6 text-gray-200 dark:text-gray-800">
+        {title}
+      </h1>
 
-            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
-              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">Aim:</h2>
-              <p className="dark:text-gray-900 text-gray-300">{aim}</p>
-            </div>
+      <div className="text-gray-800 text-md md:text-lg border border-gray-200 p-4 md:p-6 rounded-lg mb-4 md:mb-6 bg-gray-900 dark:bg-gray-50">
+        <h2 className="font-bold text-xl md:text-3xl mb-2 md:mb-3 text-gray-200 dark:text-indigo-700">Aim:</h2>
+        <p className="dark:text-gray-900 text-gray-300">{aim}</p>
+      </div>
 
-            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
-              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
-                Description:
-              </h2>
-              <p className="dark:text-gray-900 text-gray-300">{LongDescrption}</p>
-            </div>
+      <div className="text-gray-800 text-md md:text-lg border border-gray-200 p-4 md:p-6 rounded-lg mb-4 md:mb-6 bg-gray-900 dark:bg-gray-50">
+        <h2 className="font-bold text-xl md:text-3xl mb-2 md:mb-3 text-gray-200 dark:text-indigo-700">Description:</h2>
+        <p className="dark:text-gray-900 text-gray-300">{LongDescrption}</p>
+      </div>
 
-            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg mb-6 bg-gray-900 dark:bg-gray-50">
-              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
-                Tech Stack:
-              </h2>
-              <p className="dark:text-gray-900 text-gray-300">{TechStack}</p>
-            </div>
+      <div className="text-gray-800 text-md md:text-lg border border-gray-200 p-4 md:p-6 rounded-lg mb-4 md:mb-6 bg-gray-900 dark:bg-gray-50">
+        <h2 className="font-bold text-xl md:text-3xl mb-2 md:mb-3 text-gray-200 dark:text-indigo-700">Tech Stack:</h2>
+        <p className="dark:text-gray-900 text-gray-300">{TechStack}</p>
+      </div>
 
-            <div className="text-gray-800 text-lg border border-gray-200 p-6 rounded-lg bg-gray-900 dark:bg-gray-50">
-              <h2 className="font-bold text-3xl mb-3 text-gray-200 dark:text-indigo-700">
-                Learnings:
-              </h2>
-              <p className="dark:text-gray-900 text-gray-300">{Learnings}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="text-gray-800 text-md md:text-lg border border-gray-200 p-4 md:p-6 rounded-lg bg-gray-900 dark:bg-gray-50">
+        <h2 className="font-bold text-xl md:text-3xl mb-2 md:mb-3 text-gray-200 dark:text-indigo-700">Learnings:</h2>
+        <p className="dark:text-gray-900 text-gray-300">{Learnings}</p>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };
