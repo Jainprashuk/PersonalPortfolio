@@ -134,16 +134,16 @@ const EmailSection = () => {
     >
       <div className="bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary-900 to-transparent rounded-full h-80 w-80 z-0 blur-lg absolute top-3/4 -left-4 transform -translate-x-1/2 -translate-1/2"></div>
       <div className="z-10">
-        <h5 className="text-xl font-bold text-white my-2">Let&apos;s Connect</h5>
+        <h5 className="text-xl font-bold text-white my-2 dark:text-gray-900">Contact Me</h5>
         <div id="showmessage" className="hidden showmessage">
           {statusMessage}
         </div>
-        <p className="text-[#ADB7BE] mb-4 max-w-md">
+        <p className="text-[#ADB7BE] mb-4 max-w-md dark:text-gray-900">
           I&apos;m currently looking for new opportunities, my inbox is always
           open. Whether you have a question or just want to say hi, I&apos;ll
           try my best to get back to you!
         </p>
-        <p className="text-[#ADB7BE] mb-4 max-w-md">
+        <p className="text-[#ADB7BE] mb-4 max-w-md dark:text-gray-900">
           Feel free to give suggestions about my portfolio website.
         </p>
       </div>
@@ -152,7 +152,7 @@ const EmailSection = () => {
           messagesent ? (<p className="text-center my-2 text-green-500">Thank You For Submitting your Response</p>) : (
             <form className="flex flex-col form" onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="email" className="text-white block mb-2 text-sm font-medium">
+            <label htmlFor="email" className="text-white dark:text-gray-900 block mb-2 text-sm font-medium">
               Your email
             </label>
             <input
@@ -160,7 +160,7 @@ const EmailSection = () => {
               type="email"
               id="email"
               required
-              className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
+              className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] dark:bg-[#ffffff] dark:placeholder-gray-900 text-gray-100 text-sm rounded-lg block w-full p-2.5"
               placeholder="jacob@gmail.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -173,7 +173,7 @@ const EmailSection = () => {
                 type="number"
                 id="otp"
                 required
-                className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-1/2 p-2.5"
+                className="bg-[#18191E] border dark:bg-[#ffffff] dark:text-900 dark:placeholder-gray-900 border-[#33353F] placeholder-[#9CA2A9] text-gray-500 text-sm rounded-lg block w-1/2 p-2.5"
                 placeholder="OTP"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
@@ -216,7 +216,7 @@ const EmailSection = () => {
             }
             </div>
           <div className="mb-6">
-            <label htmlFor="subject" className="text-white block text-sm mb-2 font-medium">
+            <label htmlFor="subject" className="text-white dark:text-gray-900 block text-sm mb-2 font-medium">
               Subject
             </label>
             <input
@@ -224,20 +224,20 @@ const EmailSection = () => {
               type="text"
               id="subject"
               required
-              className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
+              className="bg-[#18191E] border dark:bg-[#ffffff] dark:placeholder-gray-900 border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
               placeholder="Just saying hi"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             />
           </div>
           <div className="mb-6">
-            <label htmlFor="message" className="text-white block text-sm mb-2 font-medium">
+            <label htmlFor="message" className="text-white dark:text-gray-900 block text-sm mb-2 font-medium">
               Message
             </label>
             <textarea
               name="message"
               id="message"
-              className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
+              className="bg-[#18191E] text-gray-500 border dark:bg-[#ffffff] dark:placeholder-gray-900 border-[#33353F] placeholder-[#9CA2A9]  text-sm rounded-lg block w-full p-2.5"
               placeholder="Let's talk about..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}

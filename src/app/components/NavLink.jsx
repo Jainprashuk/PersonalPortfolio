@@ -6,7 +6,7 @@ const NavLink = ({ href, title }) => {
     {title == "Admin" ? (
       <Link
         href={href}
-        className="block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white"
+        className="block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 dark:text-gray-900 hover:text-gray-100 dark:hover:text-red-900  "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -22,7 +22,7 @@ const NavLink = ({ href, title }) => {
     ) : (
       <Link
         href={href}
-        className="block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white"
+        className="block py-2 pl-3 pr-4 text-[#ADB7BE] sm:text-xl rounded md:p-0 hover:text-white dark:text-gray-900 dark:color-gray-900  dark:hover:text-red-950"
       >
         {title}
       </Link>
