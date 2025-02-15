@@ -20,8 +20,6 @@ import MailIcon from "@mui/icons-material/Mail";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import InstagramIcon from "@mui/icons-material/Instagram";
 import { useState, useEffect } from "react";
-import { color } from "framer-motion";
-import Link from "next/link";
 
 const actions = [
   { icon: <InstagramIcon />, name: "Instagram", link: "https://www.instagram.com/29prashuk_jain/?igshid=YzVkODRmOTdmMw%3D%3D" },
@@ -46,11 +44,64 @@ export default function Home() {
 
     // Listen to storage events and update theme on change
     window.addEventListener("storage", updateTheme);
-    console.log(Theme);
 
     return () => {
       window.removeEventListener("storage", updateTheme);
     };
+  }, []);
+
+  // UUID generation function
+  function generateUUID() {
+    return 'xxxxxxxxyxxxxyxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0,
+          v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
+  // Cookie handling functions
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${value};${expires};path=/`;
+  }
+
+  // Track visit function
+  async function trackVisit() {
+    let userId = getCookie('user_id');
+    if (!userId) {
+      userId = generateUUID();  // Generate a new unique ID
+      setCookie('user_id', userId, 365);  // Store for 1 year
+    }
+
+    // Send visit data to the backend
+    try {
+      const response = await fetch('https://portfolio-backend-two-zeta.vercel.app/visit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, timestamp: new Date() }),
+      });
+      const data = await response.json();
+      console.log("Visit data sent to server", data);
+    } catch (error) {
+      console.error("Error tracking visit:", error);
+    }
+
+    console.log("Tracking user with ID: ", userId);
+  }
+
+  // Call this on page load to track visit
+  useEffect(() => {
+    trackVisit();
   }, []);
 
   return (
@@ -83,13 +134,8 @@ export default function Home() {
               position: "absolute",
               bottom: 16,
               right: 16,
-              // backgroundColor: 'red dark:bg-red-900'
             }}
-            className="text-blue-600 dark:text-red-900"
-            // className="text-blue-600 dark:text-red-900"
-            icon={
-              <SpeedDialIcon className="text-gray-100 dark:text-gray-900" />
-            }
+            icon={<SpeedDialIcon className="text-gray-100 dark:text-gray-900" />}
           >
             {actions.map((action) => (
               <SpeedDialAction
@@ -97,7 +143,7 @@ export default function Home() {
                 icon={action.icon}
                 tooltipTitle={action.name}
                 className="text-gray-100 bg-gray-500 dark:bg-gray-200 dark:text-gray-900"
-                onClick={() => (window.location.href = action.link)} // Navigate when clicked
+                onClick={() => window.open(action.link, "_blank")} // Open in a new tab
               />
             ))}
           </SpeedDial>
