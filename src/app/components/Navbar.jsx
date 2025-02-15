@@ -26,9 +26,13 @@ const navLinks = [
     path: "#contact",
   },
   {
+    title: "Visitors Analytics",
+    path: "/Insights",
+  },
+  {
     title: "Admin",
     path: "/Admin/response",
-  },
+  }
 ];
 
 const Navbar = () => {
