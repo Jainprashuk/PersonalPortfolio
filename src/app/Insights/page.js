@@ -70,12 +70,15 @@ const Insights = () => {
   };
 
   const locationDistributionData = {
-    series: visits.map((visit) => visit.count),
+    // skip the entries with no location
+    series: visits.filter((visit) => visit.location).map((visit) => visit.count),
     options: {
       chart: {
         id: "pie-chart",
       },
-      labels: visits.map((visit) => visit.location.city),
+      // labels: visits.map((visit) => visit.location.city),
+      labels: visits.filter((visit) => visit.location).map((visit) => visit.location.city),
+
       title: {
         text: "Location Distribution",
         align: "center",
