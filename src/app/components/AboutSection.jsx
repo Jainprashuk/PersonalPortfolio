@@ -25,7 +25,7 @@ const TAB_DATA = [
     id: "education",
     content: (
       <ul className="list-disc pl-2">
-        <li>BTECH-CSE - LPU  ( 7.82 CGPA )</li>
+        <li>BTECH-CSE - LPU  ( 8.00 CGPA )</li>
         <li>XII - CBSE ( 78% )</li>
         <li>X - CBSE ( 79% )</li>
       </ul>
@@ -51,6 +51,7 @@ const TAB_DATA = [
     id: "Experience",
     content: (
       <ul className="list-disc pl-2">
+        <li>Software Engineer at StrideOne - current </li>
         <li>FrontEnd - Intern at StrideOne</li>
         <li>Chegg Subject Matter Expert</li>
         <li>Web-Lead IEEE CIS LPU</li>
@@ -77,7 +78,7 @@ const AboutSection = () => {
         <div className="mt-4 md:mt-0 text-left flex flex-col h-full">
           <h2 className="text-4xl font-bold text-white mb-4 dark:text-gray-900">About Me</h2>
           <p className="text-base lg:text-lg dark:text-gray-900">
-          Crafting seamless digital experiences is what drives me. As a final-year Computer Science student, currently a <u>Frontend Engineer</u> Intern at <u>StrideOne</u>, I bring ideas to life using the <u>MERN stack</u> - React, Node.js, Express, and MongoDB. My passion lies in solving complex challenges, from database optimization to creating interactive user interfaces. </p>
+          Crafting seamless digital experiences is what drives me. As a Software Engineer, currently a <u>Software Engineer</u>  at <u>StrideOne</u>, I bring ideas to life using the <u>MERN stack</u> - React, Node.js, Express, and MongoDB. My passion lies in solving complex challenges, from database optimization to creating interactive user interfaces. </p>
           <br />
           <p className="text-base lg:text-lg dark:text-gray-900">
           My Computer Science education At Lovely Professional University has equipped me with a strong foundation in algorithms, data structures, and full-stack development, which I apply to real-world projects. Specializing in MERN and experienced with frameworks like React and Angular, I’m skilled at building scalable applications. Through hands-on projects and internships, I have enhanced my collaborative and technical capabilities to create impactful, user-centered solutions.</p>

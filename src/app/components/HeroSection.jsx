@@ -4,7 +4,7 @@ import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import './sample.css'
+import "./sample.css";
 
 const HeroSection = () => {
   return (
@@ -42,9 +42,10 @@ const HeroSection = () => {
             />
           </h1>
           <p className="text-responsive text-[#ADB7BE] text-wrap dark:text-gray-900 text-base sm:text-lg mb-6 lg:text-xl">
-    Driven by innovation, I am a final-year CS student and Frontend Engineer Intern at StrideOne, skilled in MERN stack. Let&apos;s build smarter web experiences together!
-</p>
-<div>
+            Driven by innovation, Software Engineer, skilled in Full stack Development. Let&apos;s
+            build smarter web experiences together!
+          </p>
+          <div>
             <Link
               href="/#contact"
               className="px-6 inline-block py-3 w-full sm:w-fit rounded-full mr-4 bg-gradient-to-br from-primary-500 to-secondary-500 hover:bg-slate-200 text-white"
@@ -53,7 +54,7 @@ const HeroSection = () => {
             </Link>
             <Link
               href="https://drive.google.com/file/d/1JaM0EpW6hUeHe7eKHO_aBfZssZJs04aH/view"
-              alt = "Hey I am Prashuk jain , Welcome to JainPrashuk homepage. Discover more about my journey in engineering and development. i am Third-year engineering student at Lovely Professional University in Punjab, passionate about becoming a full-stack developer. Eager to learn, apply skills to real projects, and a strong team player. currently a chegg expert , ex- web lead ieee cis lpu , upcoming sde"
+              alt="Hey I am Prashuk jain , Welcome to JainPrashuk homepage. Discover more about my journey in engineering and development. i am Third-year engineering student at Lovely Professional University in Punjab, passionate about becoming a full-stack developer. Eager to learn, apply skills to real projects, and a strong team player. currently a chegg expert , ex- web lead ieee cis lpu , upcoming sde"
               target="_blank"
               className="px-1 inline-block py-1 w-full sm:w-fit rounded-full bg-pink-400 dark:bg-gray-400 dark:bg-gray-900  hover:bg-slate-800 text-white mt-3"
             >
