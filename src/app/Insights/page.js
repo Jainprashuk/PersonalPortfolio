@@ -1,11 +1,11 @@
 "use client"
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { 
-  Box, 
-  Typography, 
-  Grid, 
-  Paper, 
+import {
+  Box,
+  Typography,
+  Grid,
+  Paper,
   CircularProgress,
   FormControl,
   InputLabel,
@@ -17,7 +17,7 @@ import {
   Checkbox,
   ListItemText,
   Input
-} from "@mui/material"; 
+} from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -82,13 +82,13 @@ const Insights = () => {
 
   function filterVisitsByDateAndState(visits) {
     let filteredVisits = [...visits];
-    
+
     // Filter by time range
     if (timeRange !== 'all') {
       const now = new Date();
       const cutoff = new Date();
-      
-      switch(timeRange) {
+
+      switch (timeRange) {
         case 'day':
           cutoff.setDate(now.getDate() - 1);
           break;
@@ -104,13 +104,13 @@ const Insights = () => {
         default:
           break;
       }
-      
+
       filteredVisits = filteredVisits.map(visit => ({
         ...visit,
         timestamps: visit.timestamps.filter(t => new Date(t) >= cutoff)
       })).filter(visit => visit.timestamps.length > 0);
     }
-    
+
     // Filter by custom date range
     if (startDate && endDate) {
       filteredVisits = filteredVisits.map(visit => ({
@@ -121,14 +121,14 @@ const Insights = () => {
         })
       })).filter(visit => visit.timestamps.length > 0);
     }
-    
+
     // Filter by selected states
     if (selectedStates.length > 0) {
-      filteredVisits = filteredVisits.filter(visit => 
+      filteredVisits = filteredVisits.filter(visit =>
         visit.location && visit.location.region && selectedStates.includes(visit.location.region)
       );
     }
-    
+
     return filteredVisits;
   }
 
@@ -151,14 +151,14 @@ const Insights = () => {
 
   function prepareMapData() {
     const locationData = {};
-    
+
     filteredVisits.forEach(visit => {
       if (!visit.location) return;
-      
-      const key = mapType === 'region' 
-        ? (visit.location.region || 'Unknown') 
+
+      const key = mapType === 'region'
+        ? (visit.location.region || 'Unknown')
         : (visit.location.country || 'Unknown');
-      
+
       if (!locationData[key]) {
         locationData[key] = {
           count: 0,
@@ -166,16 +166,16 @@ const Insights = () => {
           lastVisit: null
         };
       }
-      
+
       locationData[key].count += visit.count;
       if (visit.location.city) locationData[key].cities.add(visit.location.city);
-      
+
       const lastTimestamp = visit.timestamps[visit.timestamps.length - 1];
       if (lastTimestamp && (!locationData[key].lastVisit || new Date(lastTimestamp) > new Date(locationData[key].lastVisit))) {
         locationData[key].lastVisit = lastTimestamp;
       }
     });
-    
+
     return Object.entries(locationData).map(([name, data]) => ({
       id: name,
       value: data.count,
@@ -217,7 +217,7 @@ const Insights = () => {
         categories: sortedTimestamps.map(formatDateForChart),
         labels: {
           rotate: -45,
-          formatter: function(value) {
+          formatter: function (value) {
             return value;
           }
         },
@@ -238,12 +238,12 @@ const Insights = () => {
       },
       tooltip: {
         x: {
-          formatter: function(value) {
+          formatter: function (value) {
             return formatTimestamp(sortedTimestamps[value]);
           }
         },
         y: {
-          formatter: function(value) {
+          formatter: function (value) {
             return value + (value === 1 ? " visit" : " visits");
           }
         }
@@ -269,8 +269,8 @@ const Insights = () => {
       xaxis: {
         categories: filteredVisits.map((visit) => {
           if (!visit.userId) return 'Anonymous';
-          return visit.userId.length > 6 
-            ? `${visit.userId.substring(0, 6)}...` 
+          return visit.userId.length > 6
+            ? `${visit.userId.substring(0, 6)}...`
             : visit.userId;
         }),
       },
@@ -294,10 +294,10 @@ const Insights = () => {
           },
         },
         x: {
-          formatter: function(value) {
+          formatter: function (value) {
             const visit = filteredVisits.find(v => {
-              const shortId = v.userId ? 
-                (v.userId.length > 6 ? v.userId.substring(0, 6) + '...' : v.userId) 
+              const shortId = v.userId ?
+                (v.userId.length > 6 ? v.userId.substring(0, 6) + '...' : v.userId)
                 : 'Anonymous';
               return shortId === value;
             });
@@ -319,11 +319,11 @@ const Insights = () => {
   const summaryStats = {
     totalVisits: sortedTimestamps.length,
     uniqueUsers: filteredVisits.length,
-    mostActiveState: filteredVisits.reduce((max, visit) => 
+    mostActiveState: filteredVisits.reduce((max, visit) =>
       visit.location && visit.count > (max?.count || 0) ? visit : max, null
     ),
-    lastVisit: sortedTimestamps.length > 0 
-      ? new Date(sortedTimestamps[sortedTimestamps.length - 1]) 
+    lastVisit: sortedTimestamps.length > 0
+      ? new Date(sortedTimestamps[sortedTimestamps.length - 1])
       : null
   };
 
@@ -337,45 +337,45 @@ const Insights = () => {
       }}
     >
       <Typography
-  variant="h3"
-  gutterBottom
-  sx={{
-    fontWeight: 700,
-    mb: 4,
-    textAlign: 'center',
-    color: 'primary.dark',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  }}
->
-  Portfolio Insights Dashboard
-</Typography>
+        variant="h3"
+        gutterBottom
+        sx={{
+          fontWeight: 700,
+          mb: 4,
+          textAlign: 'center',
+          color: 'primary.dark',
+          textTransform: 'uppercase',
+          letterSpacing: 1,
+        }}
+      >
+        Portfolio Insights Dashboard
+      </Typography>
 
 
       {loading ? (
         <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        mt: 10,
-        gap: 2,
-        animation: 'pulse 1.5s infinite',
-        '@keyframes pulse': {
-          '0%': { opacity: 0.8, transform: 'scale(1)' },
-          '50%': { opacity: 1, transform: 'scale(1.05)' },
-          '100%': { opacity: 0.8, transform: 'scale(1)' },
-        },
-      }}
-    >
-      <CircularProgress size={70} thickness={4} color="primary" />
-      <Typography
-        variant="subtitle1"
-        sx={{ color: 'text.secondary', fontWeight: 500 }}
-      >
-        Loading Insights...
-      </Typography>
-    </Box>
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mt: 10,
+            gap: 2,
+            animation: 'pulse 1.5s infinite',
+            '@keyframes pulse': {
+              '0%': { opacity: 0.8, transform: 'scale(1)' },
+              '50%': { opacity: 1, transform: 'scale(1.05)' },
+              '100%': { opacity: 0.8, transform: 'scale(1)' },
+            },
+          }}
+        >
+          <CircularProgress size={70} thickness={4} color="primary" />
+          <Typography
+            variant="subtitle1"
+            sx={{ color: 'text.secondary', fontWeight: 500 }}
+          >
+            Loading Insights...
+          </Typography>
+        </Box>
       ) : (
         <>
           {/* Filters Section */}
@@ -398,7 +398,7 @@ const Insights = () => {
                   </Select>
                 </FormControl>
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={3}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
@@ -409,7 +409,7 @@ const Insights = () => {
                   />
                 </LocalizationProvider>
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={3}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
@@ -421,7 +421,7 @@ const Insights = () => {
                   />
                 </LocalizationProvider>
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={3}>
                 <FormControl fullWidth>
                   <InputLabel>States</InputLabel>
@@ -454,7 +454,7 @@ const Insights = () => {
                 </Typography>
               </Paper>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Paper elevation={3} sx={{ p: 2, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant="subtitle2" color="text.secondary">Unique Users</Typography>
@@ -463,7 +463,7 @@ const Insights = () => {
                 </Typography>
               </Paper>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Paper elevation={3} sx={{ p: 2, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant="subtitle2" color="text.secondary">Most Active State</Typography>
@@ -471,16 +471,16 @@ const Insights = () => {
                   {summaryStats.mostActiveState?.location?.region || 'N/A'}
                 </Typography>
                 {summaryStats.mostActiveState && (
-                  <Chip 
-                    label={`${summaryStats.mostActiveState.count} visits`} 
-                    size="small" 
+                  <Chip
+                    label={`${summaryStats.mostActiveState.count} visits`}
+                    size="small"
                     color="primary"
                     sx={{ mt: 1 }}
                   />
                 )}
               </Paper>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Paper elevation={3} sx={{ p: 2, borderRadius: 2, textAlign: 'center' }}>
                 <Typography variant="subtitle2" color="text.secondary">Last Visit</Typography>
@@ -516,7 +516,7 @@ const Insights = () => {
                 />
               </Paper>
             </Grid>
-            
+
             <Grid item xs={12} lg={4}>
               <Paper elevation={3} sx={{ p: 2, borderRadius: 2, height: '100%' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -555,10 +555,10 @@ const Insights = () => {
                     </Box>
                   </>
                 ) : (
-                  <Box sx={{ 
-                    height: 300, 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  <Box sx={{
+                    height: 300,
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'center',
                     color: 'text.secondary'
                   }}>
@@ -567,29 +567,29 @@ const Insights = () => {
                 )}
               </Paper>
             </Grid>
-            
-            <Grid
-  item
-  xs={12}
-  className=""
-  sx={{
-    display: {
-      xs: "none", // hidden on extra-small devices (mobile)
-      sm: "block", // visible on small devices and above
-    },
-  }}
->
-  <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-    <Typography variant="h6" sx={{ mb: 2 }}>User Activity</Typography>
-    <Divider sx={{ mb: 2 }} />
-    <ReactApexChart
-      options={barChartData.options}
-      series={barChartData.series}
-      type="bar"
-      height={350}
-    />
-  </Paper>
-</Grid>
+
+            {/* <Grid
+              item
+              xs={12}
+              className=""
+              sx={{
+                display: {
+                  xs: "none", // hidden on extra-small devices (mobile)
+                  sm: "block", // visible on small devices and above
+                },
+              }}
+            >
+              <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>User Activity</Typography>
+                <Divider sx={{ mb: 2 }} />
+                <ReactApexChart
+                  options={barChartData.options}
+                  series={barChartData.series}
+                  type="bar"
+                  height={350}
+                />
+              </Paper>
+            </Grid> */}
 
           </Grid>
         </>
