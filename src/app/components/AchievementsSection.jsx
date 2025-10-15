@@ -32,7 +32,7 @@ const achievementsList = [
   },
   {
     metric: "CGPA",
-    value: "7.82",
+    value: "8",
     postfix: "",
   },
 ];
