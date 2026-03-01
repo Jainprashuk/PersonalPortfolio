@@ -1,67 +1,82 @@
-import Head from 'next/head';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { Toaster } from "react-hot-toast";
+import { Toaster } from 'react-hot-toast';
+import Script from 'next/script';
+import type { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'JainPrashuk',
+export const metadata: Metadata = {
+  metadataBase: new URL('https://jainprashuk.in'),
+  title: {
+    default: 'Prashuk Jain | Full Stack Developer',
+    template: '%s | Prashuk Jain',
+  },
   description:
-    'Welcome to JainPrashuk homepage. Discover more about my journey in engineering and development. i am Third-year engineering student at Lovely Professional University in Punjab, passionate about becoming a full-stack developer. Eager to learn, apply skills to real projects, and a strong team player.',
-  keywords: ['engineering student',
-  'personal portfolio' ,
-  'full-stack developer', 
-  'Lovely Professional University', 
-  'prashuk jain', 
-  'jain prashuk', 
-  'ieeecislpu', 
-  'react developer',
-  'mern developer',
-  'node developer',
-  'angular developer',
-  'freelancer',
-  'backend developer',
-  'frontend developer',
-  'mean developer',
-  'chegg expert', 
-  'prashuk jain lpu', 
-  'prashuk jain', 
-  'front end developer', 
-  'lpu', 
-  'codeleagalist', 
-  'jsminds', 
-  'team player',],
+    'Official portfolio of Prashuk Jain – Full Stack Developer skilled in MERN, Next.js, Angular, and scalable web applications. Passionate about building impactful digital experiences.',
+  keywords: [
+    'Prashuk Jain',
+    'Full Stack Developer',
+    'MERN Developer',
+    'React Developer',
+    'Next.js Developer',
+    'Angular Developer',
+    'Node.js Developer',
+    'Portfolio',
+    'Frontend Developer',
+    'Backend Developer',
+  ],
+  authors: [{ name: 'Prashuk Jain' }],
+  creator: 'Prashuk Jain',
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: 'https://jainprashuk.in',
+  },
+  openGraph: {
+    title: 'Prashuk Jain | Full Stack Developer',
+    description:
+      'Explore the portfolio of Prashuk Jain – Full Stack Developer building scalable web applications with modern technologies.',
+    url: 'https://jainprashuk.in',
+    siteName: 'Prashuk Jain Portfolio',
+    type: 'website',
+    locale: 'en_IN',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Prashuk Jain | Full Stack Developer',
+    description:
+      'Full Stack Developer specializing in MERN, Next.js & Angular.',
+  },
+  verification: {
+    google: 'mXc67d_o5hrbfn1Nh3NakAYEHeurLQTnPaTzP9fCo-g',
+  },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-      <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="keywords" content={metadata.keywords.join(', ')} />
-        <meta name="google-site-verification" content="mXc67d_o5hrbfn1Nh3NakAYEHeurLQTnPaTzP9fCo-g" />
-        <meta property="og:title" content={metadata.title} />
-        <link rel="canonical" href="https://jainprashuk.in"/>
-        <meta property="og:description" content={metadata.description} />
-        <meta property="og:url" content="https://jainprashuk.in" />
-        <meta name="author" content="JainPrashuk" />
-        <meta name="robots" content="index, follow"/>
-      <script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "vos366gwob");
-</script>
-
-      </Head>
-
       <body className={inter.className}>
-      <Toaster position="top-center" />
+        {/* Microsoft Clarity Script */}
+        <Script id="clarity-script" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "vos366gwob");
+          `}
+        </Script>
+
+        <Toaster position="top-center" />
         {children}
-        </body>
+      </body>
     </html>
   );
 }
