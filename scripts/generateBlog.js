@@ -1,17 +1,21 @@
 import fs from "fs";
 import dotenv from "dotenv";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
 
 async function getLatestTechTopic() {
 
   const topics = [];
 
   try {
-    // HackerNews
     const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
     const hnData = await hn.json();
 
@@ -25,9 +29,7 @@ async function getLatestTechTopic() {
     console.log("HN fetch failed");
   }
 
-
   try {
-    // Dev.to
     const dev = await fetch("https://dev.to/api/articles?top=5");
     const devData = await dev.json();
 
@@ -40,9 +42,7 @@ async function getLatestTechTopic() {
     console.log("Dev.to fetch failed");
   }
 
-
   try {
-    // GitHub trending (open source projects)
     const gh = await fetch("https://ghapi.huchen.dev/repositories");
     const ghData = await gh.json();
 
@@ -56,13 +56,11 @@ async function getLatestTechTopic() {
     console.log("GitHub fetch failed");
   }
 
-
   if (topics.length === 0) {
     return "Latest trends in software development";
   }
 
   const randomIndex = Math.floor(Math.random() * topics.length);
-
   return topics[randomIndex];
 }
 
@@ -70,18 +68,63 @@ function slugify(title) {
   return title.toLowerCase().replace(/[^\w\s]/gi, "").replace(/\s+/g, "-");
 }
 
+async function generateWithGemini(prompt) {
+
+  try {
+
+    console.log("Trying Gemini...");
+
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3-flash-preview"
+    });
+
+    const result = await model.generateContent(prompt);
+
+    return result.response.text();
+
+  } catch(err) {
+
+    console.log("Gemini failed:", err.message);
+    throw err;
+  }
+}
+
+async function generateWithGroq(prompt) {
+
+  console.log("Using Groq fallback...");
+
+  const response = await groq.chat.completions.create({
+    model: "llama-3.3-70b-versatile",
+    messages: [
+      { role: "user", content: prompt }
+    ]
+  });
+
+  return response.choices[0].message.content;
+}
+
+async function generateBlogContent(prompt){
+
+  try{
+
+    return await generateWithGemini(prompt);
+
+  }catch{
+
+    return await generateWithGroq(prompt);
+
+  }
+}
+
 async function generateBlog() {
 
   const topic = await getLatestTechTopic();
   console.log("Selected topic:", topic);
 
-
-  console.log("Generating blog about:", topic);
-
   const prompt = `
 You are a senior software engineer and technical blogger.
 
-Write a high-quality developer blog post in **Markdown** about:
+Write a high-quality developer blog post in Markdown about:
 
 "${topic}"
 
@@ -90,37 +133,27 @@ Requirements:
 - Length: 700–1000 words
 - Audience: software developers
 - Tone: professional but easy to understand
-- Format properly using Markdown
 
 Structure:
 
-1. Introduction explaining the topic and why it matters
-2. 3–4 well explained sections with clear headings
-3. At least one practical JavaScript code example
+1. Introduction explaining the topic
+2. 3–4 sections with headings
+3. One JavaScript code example
 4. Real-world use cases
-5. Best practices or tips
-6. A short conclusion summarizing key insights
+5. Best practices
+6. Conclusion
 
-Formatting rules:
+Formatting:
 
-- Use Markdown headings (##, ###)
-- Use bullet points where helpful
-- Include a JavaScript code block if helpful
-- Keep paragraphs short and readable
-- Do NOT include the blog title in the content (title is already provided)
-
-Make the blog informative, practical, and useful for developers.
+- Use Markdown headings
+- Use bullet points
+- Include JavaScript code block
+- Keep paragraphs short
 `;
 
-  const model = genAI.getGenerativeModel({
-    model: "gemini-3-flash-preview"
-  });
-
-  const result = await model.generateContent(prompt);
+  const content = await generateBlogContent(prompt);
 
   console.log("Blog generated successfully!");
-
-  const content = result.response.text();
 
   const markdown = `---
 title: ${topic}
@@ -133,12 +166,9 @@ ${content}
 
   const slug = slugify(topic);
 
-  console.log("Generated slug:", slug);
-
   fs.writeFileSync(`blogs/${slug}.md`, markdown);
 
   console.log("Blog generated:", slug);
-
 }
 
 generateBlog();
