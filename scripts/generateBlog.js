@@ -15,96 +15,74 @@ async function getLatestTechTopic() {
 
   const topics = [];
 
-  const techKeywords = [
-    "javascript","typescript","react","node","next","api","backend",
-    "frontend","web","programming","software","database","devops",
-    "docker","kubernetes","ai","machine learning","python","golang",
-    "rust","system design","microservices","cloud","aws","performance",
-    "scaling"
+  const codingKeywords = [
+    "javascript","typescript","react","node","next",
+    "api","backend","frontend","web","programming",
+    "software","database","devops","docker","kubernetes",
+    "ai","machine learning","python","rust","golang",
+    "system","performance","cloud","aws","microservices"
   ];
 
-  const badPatterns = [
+  const badWords = [
     "ask hn",
     "show hn",
-    "who is hiring",
     "hiring",
-    "?",
-    "discussion"
+    "who is hiring",
+    "challenge",
+    "celebrate",
+    "voices",
+    "community",
+    "event"
   ];
 
-  function isTechTopic(title) {
+  function isGoodTopic(title){
+
     const lower = title.toLowerCase();
 
-    const hasKeyword = techKeywords.some(k =>
+    const hasTechKeyword = codingKeywords.some(k =>
       lower.includes(k)
     );
 
-    const isBad = badPatterns.some(p =>
-      lower.includes(p)
+    const hasBadWord = badWords.some(b =>
+      lower.includes(b)
     );
 
-    return hasKeyword && !isBad;
+    return hasTechKeyword && !hasBadWord;
+
   }
 
   try {
+
     const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
     const hnData = await hn.json();
 
-    const hnTitles = hnData.hits
-      .slice(0,8)
-      .map(p => p.title)
-      .filter(Boolean);
+    topics.push(...hnData.hits.map(p=>p.title).filter(Boolean));
 
-    topics.push(...hnTitles);
-  } catch(e) {
+  } catch(e){
     console.log("HN fetch failed");
   }
 
   try {
+
     const dev = await fetch("https://dev.to/api/articles?top=5");
     const devData = await dev.json();
 
-    const devTitles = devData
-      .map(p => p.title)
-      .filter(Boolean);
+    topics.push(...devData.map(p=>p.title).filter(Boolean));
 
-    topics.push(...devTitles);
-  } catch(e) {
-    console.log("Dev.to fetch failed");
+  } catch(e){
+    console.log("Dev fetch failed");
   }
 
-  try {
-    const gh = await fetch("https://ghapi.huchen.dev/repositories");
-    const ghData = await gh.json();
+  const filtered = topics.filter(isGoodTopic);
 
-    const ghTitles = ghData
-      .slice(0,5)
-      .map(r => `Developers are exploring ${r.name}`)
-      .filter(Boolean);
+  if(filtered.length > 0){
 
-    topics.push(...ghTitles);
-  } catch(e) {
-    console.log("GitHub fetch failed");
+    return filtered[Math.floor(Math.random()*filtered.length)];
+
   }
 
-  // filter coding topics
-  const filtered = topics.filter(isTechTopic);
+  return "Modern JavaScript development best practices";
 
-  if (filtered.length > 0) {
-    return filtered[Math.floor(Math.random() * filtered.length)];
-  }
-
-  // fallback developer topics
-  const fallbackTopics = [
-    "Advanced JavaScript patterns every developer should know",
-    "How Node.js handles asynchronous operations",
-    "React performance optimization techniques",
-    "Building scalable REST APIs with Node.js",
-    "Understanding the JavaScript event loop deeply",
-    "Modern TypeScript best practices for large applications"
-  ];
-
-  return fallbackTopics[Math.floor(Math.random()*fallbackTopics.length)];
 }
 
 function slugify(title) {
@@ -174,7 +152,7 @@ Write a high-quality developer blog post in Markdown about:
 
 Requirements:
 
-- Length: 700–1000 words
+- Length: 1000-1400 words
 - Audience: software developers
 - Tone: professional but easy to understand
 
