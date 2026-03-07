@@ -36,10 +36,10 @@ jobs:
           git config --global user.name "blog-bot"
           git config --global user.email "bot@github.com"
 
-          git add blogs
-          git commit -m "Auto generated blog" || echo "No changes"
-
           git fetch origin main
           git rebase origin/main
+
+          git add blogs
+          git commit -m "Auto generated blog" || echo "No changes"
 
           git push origin main
