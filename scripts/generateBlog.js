@@ -162,6 +162,7 @@ async function generateBlogContent(prompt){
 async function generateBlog() {
 
   const topic = await getLatestTechTopic();
+  
   console.log("Selected topic:", topic);
 
   const prompt = `
