@@ -2,18 +2,23 @@ name: Auto Blog Generator
 
 on:
   schedule:
-    - cron: "0 5 * * *"   # daily 5AM UTC
-  workflow_dispatch:       # manual run bhi possible
+    - cron: "0 5 * * *"
+  workflow_dispatch:
 
 jobs:
   generate-blog:
 
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
 
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -35,4 +40,4 @@ jobs:
           git add blogs
           git commit -m "Auto generated blog" || echo "No changes"
           git pull --rebase origin main
-          git push
+          git push origin main
