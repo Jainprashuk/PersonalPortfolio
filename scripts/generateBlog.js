@@ -15,12 +15,43 @@ async function getLatestTechTopic() {
 
   const topics = [];
 
+  const techKeywords = [
+    "javascript","typescript","react","node","next","api","backend",
+    "frontend","web","programming","software","database","devops",
+    "docker","kubernetes","ai","machine learning","python","golang",
+    "rust","system design","microservices","cloud","aws","performance",
+    "scaling"
+  ];
+
+  const badPatterns = [
+    "ask hn",
+    "show hn",
+    "who is hiring",
+    "hiring",
+    "?",
+    "discussion"
+  ];
+
+  function isTechTopic(title) {
+    const lower = title.toLowerCase();
+
+    const hasKeyword = techKeywords.some(k =>
+      lower.includes(k)
+    );
+
+    const isBad = badPatterns.some(p =>
+      lower.includes(p)
+    );
+
+    return hasKeyword && !isBad;
+  }
+
   try {
     const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
     const hnData = await hn.json();
 
     const hnTitles = hnData.hits
-      .slice(0,5)
+      .slice(0,8)
       .map(p => p.title)
       .filter(Boolean);
 
@@ -48,7 +79,7 @@ async function getLatestTechTopic() {
 
     const ghTitles = ghData
       .slice(0,5)
-      .map(r => `Why developers are excited about ${r.name}`)
+      .map(r => `Developers are exploring ${r.name}`)
       .filter(Boolean);
 
     topics.push(...ghTitles);
@@ -56,12 +87,24 @@ async function getLatestTechTopic() {
     console.log("GitHub fetch failed");
   }
 
-  if (topics.length === 0) {
-    return "Latest trends in software development";
+  // filter coding topics
+  const filtered = topics.filter(isTechTopic);
+
+  if (filtered.length > 0) {
+    return filtered[Math.floor(Math.random() * filtered.length)];
   }
 
-  const randomIndex = Math.floor(Math.random() * topics.length);
-  return topics[randomIndex];
+  // fallback developer topics
+  const fallbackTopics = [
+    "Advanced JavaScript patterns every developer should know",
+    "How Node.js handles asynchronous operations",
+    "React performance optimization techniques",
+    "Building scalable REST APIs with Node.js",
+    "Understanding the JavaScript event loop deeply",
+    "Modern TypeScript best practices for large applications"
+  ];
+
+  return fallbackTopics[Math.floor(Math.random()*fallbackTopics.length)];
 }
 
 function slugify(title) {
