@@ -7,10 +7,63 @@ dotenv.config();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 async function getLatestTechTopic() {
-  const res = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
-  const data = await res.json();
-  const post = data.hits[0];
-  return post.title;
+
+  const topics = [];
+
+  try {
+    // HackerNews
+    const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
+    const hnData = await hn.json();
+
+    const hnTitles = hnData.hits
+      .slice(0,5)
+      .map(p => p.title)
+      .filter(Boolean);
+
+    topics.push(...hnTitles);
+  } catch(e) {
+    console.log("HN fetch failed");
+  }
+
+
+  try {
+    // Dev.to
+    const dev = await fetch("https://dev.to/api/articles?top=5");
+    const devData = await dev.json();
+
+    const devTitles = devData
+      .map(p => p.title)
+      .filter(Boolean);
+
+    topics.push(...devTitles);
+  } catch(e) {
+    console.log("Dev.to fetch failed");
+  }
+
+
+  try {
+    // GitHub trending (open source projects)
+    const gh = await fetch("https://ghapi.huchen.dev/repositories");
+    const ghData = await gh.json();
+
+    const ghTitles = ghData
+      .slice(0,5)
+      .map(r => `Why developers are excited about ${r.name}`)
+      .filter(Boolean);
+
+    topics.push(...ghTitles);
+  } catch(e) {
+    console.log("GitHub fetch failed");
+  }
+
+
+  if (topics.length === 0) {
+    return "Latest trends in software development";
+  }
+
+  const randomIndex = Math.floor(Math.random() * topics.length);
+
+  return topics[randomIndex];
 }
 
 function slugify(title) {
@@ -20,6 +73,9 @@ function slugify(title) {
 async function generateBlog() {
 
   const topic = await getLatestTechTopic();
+  console.log("Selected topic:", topic);
+
+  return;
 
   console.log("Generating blog about:", topic);
 
