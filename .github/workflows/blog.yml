@@ -7,14 +7,12 @@ on:
 
 jobs:
   generate-blog:
-
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -37,7 +35,11 @@ jobs:
         run: |
           git config --global user.name "blog-bot"
           git config --global user.email "bot@github.com"
+
           git add blogs
           git commit -m "Auto generated blog" || echo "No changes"
-          git pull --rebase origin main
+
+          git fetch origin main
+          git rebase origin/main
+
           git push origin main
