@@ -159,11 +159,11 @@ Requirements:
 Structure:
 
 1. Introduction explaining the topic
-2. 3–4 sections with headings
-3. One JavaScript code example
+2. 4-5 sections with headings
+3. One JavaScript code example only if required to explain a concept, otherwise keep it conceptual
 4. Real-world use cases
 5. Best practices
-6. Conclusion
+6. Conclusion (including future trends and scenarios if applicable)
 
 Formatting:
 
