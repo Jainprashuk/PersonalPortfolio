@@ -24,7 +24,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Generate blog
         env:
@@ -37,12 +37,12 @@ jobs:
           git config --global user.name "blog-bot"
           git config --global user.email "bot@github.com"
 
-          git stash
-          git fetch origin main
-          git rebase origin/main
-          git stash pop
-
           git add blogs
-          git commit -m "Auto generated blog" || echo "No changes"
 
-          git push origin main
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Auto generated blog"
+          git push
