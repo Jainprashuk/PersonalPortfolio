@@ -75,7 +75,6 @@ async function generateBlog() {
   const topic = await getLatestTechTopic();
   console.log("Selected topic:", topic);
 
-  return;
 
   console.log("Generating blog about:", topic);
 
