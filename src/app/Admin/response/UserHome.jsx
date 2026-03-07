@@ -44,12 +44,42 @@ const UserHome = () => {
       toast.error("Access denied! ");
     }
   };
+    const navLinks = [
+  {
+    title: "About",
+    path: "#about",
+  },
+  {
+    title: "Projects",
+    path: "#projects",
+  },
+  {
+    title: "Blogs",
+    path: "/blog",
+  },
+  {
+    title: "Certificates",
+    path: "#certificates",
+  },
+  {
+    title: "Contact Me",
+    path: "#contact",
+  },
+  {
+    title: "Visitors Analytics",
+    path: "/Insights",
+  },
+  {
+    title: "Admin",
+    path: "/Admin/response",
+  }
+];
   return (
     <>
       {verified ? (
         <div>
           <div className="min-h-screen">
-            <Navbar />
+            <Navbar navLinks={navLinks} />
             <div className=" max-w-screen h-screen p-5  ">
               <div className="max-w-screen">
                 {formdata.map((ele) => (

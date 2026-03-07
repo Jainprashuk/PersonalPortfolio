@@ -104,9 +104,40 @@ export default function Home() {
     trackVisit();
   }, []);
 
+  const navLinks = [
+  {
+    title: "About",
+    path: "#about",
+  },
+  {
+    title: "Projects",
+    path: "#projects",
+  },
+  {
+    title: "Blogs",
+    path: "/blog",
+  },
+  {
+    title: "Certificates",
+    path: "#certificates",
+  },
+  {
+    title: "Contact Me",
+    path: "#contact",
+  },
+  // {
+  //   title: "Visitors Analytics",
+  //   path: "/Insights",
+  // },
+  {
+    title: "Admin",
+    path: "/Admin/response",
+  }
+];
+
   return (
     <main className="flex min-h-screen flex-col bg-[#121212] dark:bg-gray-100">
-      <Navbar />
+      <Navbar navLinks={navLinks} />
       <div className="container mt-24 mx-auto px-12 py-4">
         <HeroSection />
         <AchievementsSection />

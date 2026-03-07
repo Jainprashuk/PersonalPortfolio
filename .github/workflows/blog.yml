@@ -1,0 +1,37 @@
+name: Auto Blog Generator
+
+on:
+  schedule:
+    - cron: "0 5 * * *"   # daily 5AM UTC
+  workflow_dispatch:       # manual run bhi possible
+
+jobs:
+  generate-blog:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate blog
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/generateBlog.js
+
+      - name: Commit and push blog
+        run: |
+          git config --global user.name "blog-bot"
+          git config --global user.email "bot@github.com"
+          git add blogs
+          git commit -m "Auto generated blog"
+          git push

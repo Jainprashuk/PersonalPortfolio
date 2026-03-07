@@ -8,34 +8,9 @@ import ThemeToogler from "./ThemeToogler";
 
 import { TypeAnimation } from "react-type-animation";
 
-const navLinks = [
-  {
-    title: "About",
-    path: "#about",
-  },
-  {
-    title: "Projects",
-    path: "#projects",
-  },
-  {
-    title: "Certificates",
-    path: "#certificates",
-  },
-  {
-    title: "Contact Me",
-    path: "#contact",
-  },
-  {
-    title: "Visitors Analytics",
-    path: "/Insights",
-  },
-  {
-    title: "Admin",
-    path: "/Admin/response",
-  }
-];
 
-const Navbar = () => {
+
+const Navbar = ({ navLinks }) => {
   const [navbarOpen, setNavbarOpen] = useState(false);
 
   return (
