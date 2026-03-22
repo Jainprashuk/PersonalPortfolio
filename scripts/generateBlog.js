@@ -12,24 +12,7 @@ const groq = new Groq({
 });
 
 
-// 🔥 YOUR SKILLS
-const mySkills = [
-  "react",
-  "next.js",
-  "javascript",
-  "typescript",
-  "frontend",
-  "ui",
-  "tailwind",
-  "redux",
-  "web performance",
-  "auth",
-  "api",
-  "mern"
-];
-
-
-// 🔥 fallback topics
+// 🔥 fallback topics (safe + high quality)
 const fallbackTopics = [
   "How I built a scalable React app with Tailwind and Redux",
   "Optimizing React performance in real-world apps",
@@ -39,63 +22,16 @@ const fallbackTopics = [
 ];
 
 
-// 🔥 scoring
-function scoreTopic(title){
-  const lower = title.toLowerCase();
-  let score = 0;
-
-  mySkills.forEach(skill => {
-    if(lower.includes(skill)){
-      score += 2;
-    }
-  });
-
-  if(lower.includes("how") || lower.includes("guide")) score += 1;
-
-  return score;
+// 🔥 slug
+function slugify(title) {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, "")
+    .replace(/\s+/g, "-");
 }
 
 
-// 🔥 remove bad topics
-function isGoodTopic(title){
-  const badWords = [
-    "ask hn","show hn","hiring","who is hiring",
-    "challenge","celebrate","voices","community","event"
-  ];
-
-  const lower = title.toLowerCase();
-  return !badWords.some(b => lower.includes(b));
-}
-
-
-// 🔥 ensure frontend relevance
-function hasCoreFrontendKeyword(title){
-  const lower = title.toLowerCase();
-
-  return (
-    lower.includes("react") ||
-    lower.includes("frontend") ||
-    lower.includes("javascript") ||
-    lower.includes("ui") ||
-    lower.includes("web")
-  );
-}
-
-
-// 🔥 avoid generic AI topics
-function isTooGenericAI(title){
-  const lower = title.toLowerCase();
-
-  return (
-    lower.includes("human reasoning") ||
-    lower.includes("thinking fast") ||
-    lower.includes("philosophy") ||
-    lower.includes("society")
-  );
-}
-
-
-// 🔥 get existing blogs
+// 🔥 existing blogs
 function getExistingSlugs(){
   if (!fs.existsSync("blogs")) return [];
 
@@ -105,54 +41,70 @@ function getExistingSlugs(){
 }
 
 
-// 🔥 fetch + smart topic selection
-async function getLatestTechTopic() {
+// 🔥 AI topic generator (MAIN MAGIC 🔥)
+async function generateTopicsWithAI(){
 
-  let topics = [];
+  const prompt = `
+You are a senior frontend engineer.
+
+Generate 10 blog topic ideas for a developer who specializes in:
+
+- React
+- Next.js
+- Tailwind CSS
+- MERN stack
+
+Rules:
+
+- ONLY frontend / React related topics
+- No backend, DevOps, Docker, databases
+- Focus on real-world problems
+- Focus on performance, UI, architecture, scaling frontend apps
+- Topics should feel like real developer blog titles
+
+Return ONLY a JSON array.
+`;
 
   try {
-    const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
-    const hnData = await hn.json();
-    topics.push(...hnData.hits.map(p=>p.title).filter(Boolean));
-  } catch(e){
-    console.log("HN fetch failed:", e.message);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-3-flash-preview"
+    });
+
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
+
+    return JSON.parse(text);
+
+  } catch (e) {
+    console.log("AI topic generation failed, fallback used");
+    return fallbackTopics;
   }
-
-  try {
-    const dev = await fetch("https://dev.to/api/articles?top=5");
-    const devData = await dev.json();
-    topics.push(...devData.map(p=>p.title).filter(Boolean));
-  } catch(e){
-    console.log("Dev fetch failed:", e.message);
-  }
-
-  const existing = getExistingSlugs();
-
-  const ranked = topics
-    .filter(isGoodTopic)
-    .filter(hasCoreFrontendKeyword)
-    .filter(t => !isTooGenericAI(t))
-    .map(t => ({ title: t, score: scoreTopic(t) }))
-    .filter(t => t.score > 0)
-    .filter(t => !existing.includes(slugify(t.title)))
-    .sort((a,b) => b.score - a.score);
-
-  if (ranked.length > 0) {
-    const topN = ranked.slice(0, 5); // 🔥 pick from top 5
-    const random = topN[Math.floor(Math.random() * topN.length)];
-    return random.title;
-  }
-
-  return fallbackTopics[Math.floor(Math.random() * fallbackTopics.length)];
 }
 
 
-// 🔥 slug
-function slugify(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^\w\s]/gi, "")
-    .replace(/\s+/g, "-");
+// 🔥 pick topic (smart + no duplicate)
+async function getTopic(){
+
+  const existing = getExistingSlugs();
+
+  const useAI = Math.random() < 0.7;
+
+  let topics = [];
+
+  if(useAI){
+    topics = await generateTopicsWithAI();
+  } else {
+    topics = fallbackTopics;
+  }
+
+  // remove already written topics
+  const filtered = topics.filter(t => 
+    !existing.includes(slugify(t))
+  );
+
+  const finalList = filtered.length > 0 ? filtered : topics;
+
+  return finalList[Math.floor(Math.random() * finalList.length)];
 }
 
 
@@ -202,8 +154,9 @@ async function generateBlogContent(prompt){
 // 🔥 MAIN
 async function generateBlog() {
 
-  const topic = await getLatestTechTopic();
-  console.log("Selected topic:", topic);
+  const topic = await getTopic();
+
+  console.log("🔥 Selected topic:", topic);
 
   const slug = slugify(topic);
 
@@ -229,7 +182,7 @@ ${style}
 
 You are NOT an AI.
 
-You are Prashuk Jain, a full-stack developer specializing in React, Next.js, and MERN stack (frontend ) , currently working as software enginner.
+You are Prashuk Jain, a full-stack developer specializing in React, Next.js, and MERN stack.
 
 Write a developer blog post in a natural, human tone.
 
@@ -250,7 +203,7 @@ Guidelines:
 
 Structure:
 
-1. Personal introduction , very short
+1. Short personal introduction
 2. 4-5 sections
 3. Real-world examples
 4. One code example (if needed)
