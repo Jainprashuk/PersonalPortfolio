@@ -11,17 +11,53 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
-async function getLatestTechTopic() {
 
-  const topics = [];
+// 🔥 YOUR SKILLS (controls topic relevance)
+const mySkills = [
+  "react",
+  "next.js",
+  "javascript",
+  "typescript",
+  "frontend",
+  "ui",
+  "tailwind",
+  "redux",
+  "web performance",
+  "auth",
+  "api",
+  "mern"
+];
 
-  const codingKeywords = [
-    "javascript","typescript","react","node","next",
-    "api","backend","frontend","web","programming",
-    "software","database","devops","docker","kubernetes",
-    "ai","machine learning","python","rust","golang",
-    "system","performance","cloud","aws","microservices"
-  ];
+
+// 🔥 fallback topics (in case APIs fail)
+const fallbackTopics = [
+  "How I built a scalable React app with Tailwind and Redux",
+  "Optimizing React performance in real-world apps",
+  "Handling authentication in MERN apps using JWT",
+  "Building reusable UI components with React and Tailwind",
+  "Common mistakes I made while learning React and how I fixed them"
+];
+
+
+// 🔥 topic scoring
+function scoreTopic(title){
+  const lower = title.toLowerCase();
+  let score = 0;
+
+  mySkills.forEach(skill => {
+    if(lower.includes(skill)){
+      score += 2;
+    }
+  });
+
+  if(lower.includes("how") || lower.includes("guide")) score += 1;
+
+  return score;
+}
+
+
+// 🔥 filter bad topics
+function isGoodTopic(title){
 
   const badWords = [
     "ask hn",
@@ -35,60 +71,59 @@ async function getLatestTechTopic() {
     "event"
   ];
 
-  function isGoodTopic(title){
+  const lower = title.toLowerCase();
 
-    const lower = title.toLowerCase();
+  return !badWords.some(b => lower.includes(b));
+}
 
-    const hasTechKeyword = codingKeywords.some(k =>
-      lower.includes(k)
-    );
 
-    const hasBadWord = badWords.some(b =>
-      lower.includes(b)
-    );
+// 🔥 fetch + smart select
+async function getLatestTechTopic() {
 
-    return hasTechKeyword && !hasBadWord;
-
-  }
+  let topics = [];
 
   try {
-
     const hn = await fetch("https://hn.algolia.com/api/v1/search?tags=front_page");
     const hnData = await hn.json();
 
     topics.push(...hnData.hits.map(p=>p.title).filter(Boolean));
-
   } catch(e){
-    console.log("HN fetch failed");
+    console.log("HN fetch failed:", e.message);
   }
 
   try {
-
     const dev = await fetch("https://dev.to/api/articles?top=5");
     const devData = await dev.json();
 
     topics.push(...devData.map(p=>p.title).filter(Boolean));
-
   } catch(e){
-    console.log("Dev fetch failed");
+    console.log("Dev fetch failed:", e.message);
   }
 
-  const filtered = topics.filter(isGoodTopic);
+  const ranked = topics
+    .filter(isGoodTopic)
+    .map(t => ({ title: t, score: scoreTopic(t) }))
+    .filter(t => t.score > 0)
+    .sort((a,b) => b.score - a.score);
 
-  if(filtered.length > 0){
-
-    return filtered[Math.floor(Math.random()*filtered.length)];
-
+  if(ranked.length > 0){
+    return ranked[0].title;
   }
 
-  return "Modern JavaScript development best practices";
-
+  return fallbackTopics[Math.floor(Math.random() * fallbackTopics.length)];
 }
 
+
+// 🔥 slug generator
 function slugify(title) {
-  return title.toLowerCase().replace(/[^\w\s]/gi, "").replace(/\s+/g, "-");
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, "")
+    .replace(/\s+/g, "-");
 }
 
+
+// 🔥 GEMINI
 async function generateWithGemini(prompt) {
 
   try {
@@ -110,6 +145,8 @@ async function generateWithGemini(prompt) {
   }
 }
 
+
+// 🔥 GROQ FALLBACK
 async function generateWithGroq(prompt) {
 
   console.log("Using Groq fallback...");
@@ -124,53 +161,84 @@ async function generateWithGroq(prompt) {
   return response.choices[0].message.content;
 }
 
+
+// 🔥 content generator
 async function generateBlogContent(prompt){
 
   try{
-
     return await generateWithGemini(prompt);
-
   }catch{
-
     return await generateWithGroq(prompt);
-
   }
 }
 
+
+// 🔥 MAIN BLOG GENERATOR
 async function generateBlog() {
 
   const topic = await getLatestTechTopic();
   
   console.log("Selected topic:", topic);
 
+  const slug = slugify(topic);
+
+  // 🚫 prevent duplicate blogs
+  if (fs.existsSync(`blogs/${slug}.md`)) {
+    console.log("Blog already exists, skipping...");
+    return;
+  }
+
+  // 🔥 optional: writing style memory
+  let style = "";
+  try {
+    style = fs.readFileSync("writingStyle.txt", "utf-8");
+  } catch {
+    style = `
+I prefer writing blogs in a simple and practical way.
+I focus on real-world implementation instead of theory.
+I explain things using my own project experiences.
+I care about UI, performance, and clean code.
+`;
+  }
+
   const prompt = `
-You are a senior software engineer and technical blogger.
+${style}
 
-Write a high-quality developer blog post in Markdown about:
+You are NOT an AI.
 
+You are Prashuk Jain, a final-year Computer Science student and full-stack developer specializing in React, Next.js, and MERN stack.
+
+Write a developer blog post in a natural, human tone.
+
+Topic:
 "${topic}"
 
-Requirements:
+Guidelines:
 
-- Length: 1000-1400 words
-- Audience: software developers
-- Tone: professional but easy to understand
+- Conversational tone (like talking to another developer)
+- Use real-world thinking
+- Add lines like:
+  "In one of my projects..."
+  "I ran into this issue when..."
+  "What worked for me was..."
+- Avoid robotic tone
+- Slight imperfections are OK
+- Add opinions where useful
 
 Structure:
 
-1. Introduction explaining the topic
-2. 4-5 sections with headings
-3. One JavaScript code example only if required to explain a concept, otherwise keep it conceptual
-4. Real-world use cases
+1. Personal introduction
+2. 4-5 sections
+3. Real-world examples
+4. One JavaScript example (only if needed)
 5. Best practices
-6. Conclusion (including future trends and scenarios if applicable)
+6. Conclusion with learnings
 
 Formatting:
 
-- Use Markdown headings
-- Use bullet points
-- Include JavaScript code block
-- Keep paragraphs short
+- Markdown
+- Short paragraphs
+- Bullet points
 `;
 
   const content = await generateBlogContent(prompt);
@@ -186,11 +254,18 @@ description: Blog about ${topic}
 ${content}
 `;
 
-  const slug = slugify(topic);
+  // ensure folder exists
+  if (!fs.existsSync("blogs")) {
+    fs.mkdirSync("blogs");
+  }
 
   fs.writeFileSync(`blogs/${slug}.md`, markdown);
 
-  console.log("Blog generated:", slug);
+  console.log("Blog saved:", slug);
 }
 
-generateBlog();
+
+// 🔥 run
+(async () => {
+  await generateBlog();
+})();
