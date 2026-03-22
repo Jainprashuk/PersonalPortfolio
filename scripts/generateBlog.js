@@ -53,6 +53,9 @@ Generate 10 blog topic ideas for a developer who specializes in:
 - Next.js
 - Tailwind CSS
 - MERN stack
+- Frontend Optimization
+- Frontend Best Bractices
+- Frontend performance
 
 Rules:
 
