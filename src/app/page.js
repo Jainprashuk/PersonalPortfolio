@@ -1,32 +1,20 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 import AboutSection from "./components/AboutSection";
-import ProjectsSection from "./components/ProjectsSection";
-import EmailSection from "./components/EmailSection";
-import Footer from "./components/Footer";
-import AchievementsSection from "./components/AchievementsSection";
-import CertificateSection from "./components/CertificationSection";
-
-import Box from "@mui/material/Box";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import WhatsAppIcon from "@mui/icons-material/WhatsApp";
-import MailIcon from "@mui/icons-material/Mail";
-import GitHubIcon from '@mui/icons-material/GitHub';
-import InstagramIcon from "@mui/icons-material/Instagram";
 import { useState, useEffect } from "react";
 
-const actions = [
-  { icon: <InstagramIcon />, name: "Instagram", link: "https://www.instagram.com/29prashuk_jain/?igshid=YzVkODRmOTdmMw%3D%3D" },
-  { icon: <WhatsAppIcon />, name: "WhatsApp", link: "https://api.whatsapp.com/send/?phone=916265831996&text=Hey+there+%2C+can+we+talk..&type=phone_number&app_absent=0" },
-  { icon: <LinkedInIcon />, name: "LinkedIn", link: "https://www.linkedin.com/in/prashuk-jain-937a12212/" },
-  { icon: <GitHubIcon />, name: "GitHub", link: "https://github.com/jainprashuk" },
-];
+// Below-the-fold sections are code-split so the initial bundle only
+// contains what's needed to render the hero/nav/about above the fold.
+const ProjectsSection = dynamic(() => import("./components/ProjectsSection"));
+const EmailSection = dynamic(() => import("./components/EmailSection"));
+const Footer = dynamic(() => import("./components/Footer"));
+const AchievementsSection = dynamic(() => import("./components/AchievementsSection"));
+const CertificateSection = dynamic(() => import("./components/CertificationSection"));
+const ContactSpeedDial = dynamic(() => import("./components/ContactSpeedDial"), { ssr: false });
 
 export default function Home() {
   const router = useRouter();
@@ -148,38 +136,7 @@ export default function Home() {
       </div>
       <Footer />
 
-      <Box
-        sx={{
-          height: 320,
-          transform: "translateZ(0px)",
-          flexGrow: 1,
-          position: "fixed",
-          bottom: "0.1rem",
-          right: "0.1rem",
-        }}
-      >
-        <div>
-          <SpeedDial
-            ariaLabel="SpeedDial basic example"
-            sx={{
-              position: "absolute",
-              bottom: 16,
-              right: 16,
-            }}
-            icon={<SpeedDialIcon className="text-gray-100 dark:text-gray-900" />}
-          >
-            {actions.map((action) => (
-              <SpeedDialAction
-                key={action.name}
-                icon={action.icon}
-                tooltipTitle={action.name}
-                className="text-gray-100 bg-gray-500 dark:bg-gray-200 dark:text-gray-900"
-                onClick={() => window.open(action.link, "_blank")} // Open in a new tab
-              />
-            ))}
-          </SpeedDial>
-        </div>
-      </Box>
+      <ContactSpeedDial />
     </main>
   );
 }

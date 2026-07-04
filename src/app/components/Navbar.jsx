@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useState } from "react";
 import NavLink from "./NavLink";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -21,9 +22,11 @@ const Navbar = ({ navLinks }) => {
             href={"/"}
             className="text-2xl md:text-5xl text-white font-semibold"
           >
-            <img
+            <Image
               src="/images/header.png"
               width={48}
+              height={48}
+              priority
               alt="Hey I am Prashuk jain , Welcome to JainPrashuk homepage. Discover more about my journey in engineering and development. i am Third-year engineering student at Lovely Professional University in Punjab, passionate about becoming a full-stack developer. Eager to learn, apply skills to real projects, and a strong team player. currently a chegg expert , ex- web lead ieee cis lpu , upcoming sde"
             />
           </Link>
