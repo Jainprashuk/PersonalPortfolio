@@ -1,17 +1,29 @@
 import fs from "fs";
 import path from "path";
-import Link from "next/link";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import BlogList from "../components/BlogList";
+import { safeMatter, estimateReadTime } from "../lib/blog";
 
 export default function BlogPage() {
 
-  const blogDir = path.join(process.cwd(),"blogs");
+  const blogDir = path.join(process.cwd(), "blogs");
 
-  const files = fs.readdirSync(blogDir);
+  const files = fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"));
 
-  const blogs = files.map(file => ({
-    slug: file.replace(".md",""),
-  }));
+  const blogs = files.map((file) => {
+    const slug = file.replace(".md", "");
+    const fileContent = fs.readFileSync(path.join(blogDir, file), "utf-8");
+    const { content, data } = safeMatter(fileContent, slug);
+
+    return {
+      slug,
+      title: data.title || slug.replaceAll("-", " "),
+      description: data.description || `Read this developer blog about ${slug.replaceAll("-", " ")}`,
+      date: data.date || null,
+      readTime: estimateReadTime(content),
+    };
+  }).sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const navLinks = [
     { title: "Home", path: "/" },
@@ -25,37 +37,25 @@ export default function BlogPage() {
     <>
       <Navbar navLinks={navLinks} />
 
-      <div className="min-h-screen bg-black dark:bg-white text-white dark:text-gray-900 px-8 py-20 mt-6">
+      <div className="min-h-screen bg-black dark:bg-white text-white dark:text-gray-900 px-6 sm:px-8 py-24">
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-
-          {blogs.map((blog) => (
-
-            <Link
-              key={blog.slug}
-              href={`/blog/${blog.slug}`}
-              className="bg-zinc-900 dark:bg-gray-100 hover:bg-zinc-800 dark:hover:bg-gray-200 transition rounded-xl p-6 border border-zinc-800 dark:border-gray-200 hover:border-pink-500"
-            >
-
-              <h2 className="text-xl font-semibold mb-3 capitalize">
-                {blog.slug.replaceAll("-", " ")}
-              </h2>
-
-              <p className="text-gray-400 dark:text-gray-600 text-sm">
-                Read this developer blog about {blog.slug.replaceAll("-", " ")}
-              </p>
-
-              <div className="mt-4 text-pink-400 dark:text-pink-500 text-sm">
-                Read Article →
-              </div>
-
-            </Link>
-
-          ))}
-
+        <div className="max-w-6xl mx-auto mb-12 text-center">
+          <h1 className="text-4xl sm:text-5xl font-extrabold mb-4">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-secondary-600">
+              The Blog
+            </span>
+          </h1>
+          <p className="text-[#ADB7BE] dark:text-gray-600 max-w-2xl mx-auto">
+            A running log of developer notes on software engineering and the latest happenings
+            in tech &mdash; {blogs.length} {blogs.length === 1 ? "post" : "posts"} and counting.
+          </p>
         </div>
 
+        <BlogList blogs={blogs} />
+
       </div>
+
+      <Footer />
     </>
   );
 }

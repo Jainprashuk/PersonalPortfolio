@@ -11,7 +11,7 @@ const projectsData = [
     description: "Personalized digital Website featuring work, skills, and personality for professional display and engagement",
     image: "/images/projects/portfolio.jpg",
     tag: ["All", "Web"],
-    gitUrl: "/",
+    gitUrl: "https://github.com/Jainprashuk/PersonalPortfolio",
     previewUrl: "/",
     aim:"The Aim Of personal portfolio website is to showcases skills and achievements to potential employers or clients, serving as a professional online identity for easy contact and strong first impressions. ",
     LongDescrption : " I have developed a personal portfolio website to showcase my presence in the field of computer science. This portfolio encapsulates not just who I am, but also the journey of the past two years. It marks the realization of a project that began in my first year of college—a basic HTML, CSS, and intermittent JavaScript portfolio. Since then, I have advanced through Tailwind CSS, delved deeper into JavaScript, and now embraced React and Next.js to enhance and elevate my portfolio's functionality and aesthetics. This website includes details of my achievements, experience, projects, certificates, and most importantly, the work I have accomplished during my college years.",
@@ -50,12 +50,12 @@ const projectsData = [
     description: "Code Leagalist: A Smart India Hackathon project advancing to finals. Designed a digital assistant for legal awareness and a KYC framework in India.",
     image: "/images/projects/codeleagalist.jpg",
     tag: ["All", "Web"],
-    gitUrl: "/",
+    gitUrl: "https://code-legalist.vercel.app/",
     previewUrl: "https://code-legalist.vercel.app/",
-    aim:"To Craete A legal Awareness KYR System At Smart India Hackathon",
-    LongDescrption : "",
-    TechStack : "React , NLP , Python ,JavaScript , HTML , CSS , JSon , ",
-    Learnings : "d"
+    aim:"To create a legal awareness and Know Your Rights (KYR) system for Smart India Hackathon",
+    LongDescrption : "Code Legalist is a digital assistant built for Smart India Hackathon to bridge the gap between citizens and legal awareness in India. It provides an accessible KYC (Know Your Customer) and KYR (Know Your Rights) framework, helping users understand their legal rights and navigate everyday legal questions through a simple, conversational interface. The project advanced to the finals of Smart India Hackathon.",
+    TechStack : "React, NLP, Python, JavaScript, HTML, CSS, JSON",
+    Learnings : "Working under hackathon time constraints taught me to rapidly prototype, integrate NLP-based assistants into a React frontend, and collaborate effectively with a cross-functional team to deliver a working demo under pressure."
   },
   {
     id: 5,
