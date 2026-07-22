@@ -31,13 +31,18 @@ function slugify(title) {
 }
 
 
-// 🔥 existing blogs
+// 🔥 existing posts — check BOTH published (blogs/) and pending (drafts/) so we
+// don't regenerate a topic that's already written or waiting for review.
 function getExistingSlugs(){
-  if (!fs.existsSync("blogs")) return [];
-
-  return fs.readdirSync("blogs").map(file =>
-    file.replace(".md", "")
-  );
+  const dirs = ["blogs", "drafts"];
+  const slugs = new Set();
+  for (const dir of dirs) {
+    if (!fs.existsSync(dir)) continue;
+    for (const file of fs.readdirSync(dir)) {
+      if (file.endsWith(".md")) slugs.add(file.replace(".md", ""));
+    }
+  }
+  return [...slugs];
 }
 
 
@@ -163,8 +168,9 @@ async function generateBlog() {
 
   const slug = slugify(topic);
 
-  if (fs.existsSync(`blogs/${slug}.md`)) {
-    console.log("Blog already exists, skipping...");
+  // Skip if the topic already exists as a published post OR a pending draft.
+  if (fs.existsSync(`blogs/${slug}.md`) || fs.existsSync(`drafts/${slug}.md`)) {
+    console.log("Post already exists (blogs/ or drafts/), skipping...");
     return;
   }
 
@@ -222,22 +228,28 @@ Formatting:
 
   const content = await generateBlogContent(prompt);
 
+  // JSON.stringify quotes and escapes the value so a colon (or quote) in the
+  // topic can't break YAML frontmatter parsing downstream.
+  // Generated posts land in drafts/ as unpublished; a human approves them into
+  // blogs/ via `npm run drafts` or the /Admin/drafts review UI.
   const markdown = `---
-title: ${topic}
+title: ${JSON.stringify(topic)}
 date: ${new Date().toISOString()}
-description: Blog about ${topic}
+description: ${JSON.stringify(`Blog about ${topic}`)}
+status: draft
+aiAssisted: true
 ---
 
 ${content}
 `;
 
-  if (!fs.existsSync("blogs")) {
-    fs.mkdirSync("blogs");
+  if (!fs.existsSync("drafts")) {
+    fs.mkdirSync("drafts");
   }
 
-  fs.writeFileSync(`blogs/${slug}.md`, markdown);
+  fs.writeFileSync(`drafts/${slug}.md`, markdown);
 
-  console.log("✅ Blog saved:", slug);
+  console.log("✅ Draft saved:", slug);
 }
 
 

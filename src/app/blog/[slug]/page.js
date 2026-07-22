@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Navbar from "../../components/Navbar";
@@ -20,12 +21,21 @@ export default function BlogPost({ params }) {
 
   const blogDir = path.join(process.cwd(), "blogs");
   const filePath = path.join(blogDir, `${params.slug}.md`);
+
+  // The post may not exist (unpublished/deleted, or blogs/ empty). Render the
+  // 404 page instead of letting readFileSync throw.
+  if (!fs.existsSync(filePath)) {
+    notFound();
+  }
+
   const fileContent = fs.readFileSync(filePath, "utf-8");
 
   const { content, data } = safeMatter(fileContent, params.slug);
   const readTime = estimateReadTime(content);
 
-  const files = fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"));
+  const files = fs.existsSync(blogDir)
+    ? fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"))
+    : [];
   const ordered = files
     .map((file) => {
       const slug = file.replace(".md", "");
