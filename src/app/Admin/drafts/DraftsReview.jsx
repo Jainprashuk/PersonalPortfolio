@@ -8,7 +8,6 @@ import {
   ExclamationTriangleIcon,
   CheckCircleIcon,
   TrashIcon,
-  ArrowTopRightOnSquareIcon,
   EyeIcon,
   EyeSlashIcon,
 } from "@heroicons/react/24/outline";
@@ -219,14 +218,6 @@ function DraftCard({ draft, onDone }) {
             Delete
           </button>
         )}
-
-        <a
-          href={`vscode://file${draft.filePath}`}
-          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 px-4 py-2 text-sm text-gray-300 hover:border-secondary-500 transition"
-        >
-          <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-          Open in editor
-        </a>
 
         <button
           onClick={() => setOpen((o) => !o)}

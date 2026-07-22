@@ -1,6 +1,5 @@
-import path from "path";
 import { notFound } from "next/navigation";
-import { isDev, listDrafts, DRAFT_DIR } from "../../lib/drafts";
+import { isDev, listDrafts } from "../../lib/drafts";
 import DraftsReview from "./DraftsReview";
 
 // This page writes to disk via its API routes, so it only exists in development.
@@ -17,10 +16,7 @@ export default function AdminDraftsPage() {
     notFound();
   }
 
-  const drafts = listDrafts().map((d) => ({
-    ...d,
-    filePath: path.join(DRAFT_DIR, `${d.slug}.md`),
-  }));
+  const drafts = listDrafts();
 
   return (
     <div className="min-h-screen bg-black text-white px-6 sm:px-8 py-16">

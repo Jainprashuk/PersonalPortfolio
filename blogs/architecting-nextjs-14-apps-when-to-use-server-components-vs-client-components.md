@@ -2,7 +2,7 @@
 title: "Architecting Next.js 14 Apps: When to Use Server Components vs. Client Components"
 date: 2026-04-02T06:14:07.518Z
 description: "Blog about Architecting Next.js 14 Apps: When to Use Server Components vs. Client Components"
-status: draft
+status: published
 aiAssisted: true
 ---
 
