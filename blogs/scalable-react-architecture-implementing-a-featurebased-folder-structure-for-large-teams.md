@@ -2,7 +2,7 @@
 title: "Scalable React Architecture: Implementing a Feature-Based Folder Structure for Large Teams"
 date: 2026-05-01T07:27:49.334Z
 description: "Blog about Scalable React Architecture: Implementing a Feature-Based Folder Structure for Large Teams"
-status: draft
+status: published
 aiAssisted: true
 ---
 

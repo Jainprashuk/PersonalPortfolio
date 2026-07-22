@@ -2,7 +2,7 @@
 title: "React: Singletons aren't as evil as you think"
 date: 2026-03-07T14:46:40.788Z
 description: "Blog about React: Singletons aren't as evil as you think"
-status: draft
+status: published
 aiAssisted: true
 ---
 

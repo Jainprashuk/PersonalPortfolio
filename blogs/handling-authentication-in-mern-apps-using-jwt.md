@@ -2,7 +2,7 @@
 title: "Handling authentication in MERN apps using JWT"
 date: 2026-04-04T06:01:43.455Z
 description: "Blog about Handling authentication in MERN apps using JWT"
-status: draft
+status: published
 aiAssisted: true
 ---
 

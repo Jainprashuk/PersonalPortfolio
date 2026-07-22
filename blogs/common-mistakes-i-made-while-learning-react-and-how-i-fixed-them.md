@@ -2,7 +2,7 @@
 title: "Common mistakes I made while learning React and how I fixed them"
 date: 2026-04-03T06:14:20.993Z
 description: "Blog about Common mistakes I made while learning React and how I fixed them"
-status: draft
+status: published
 aiAssisted: true
 ---
 
