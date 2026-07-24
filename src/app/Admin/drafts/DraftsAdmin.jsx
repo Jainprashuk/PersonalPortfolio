@@ -10,6 +10,7 @@ import {
   TrashIcon,
   EyeIcon,
   EyeSlashIcon,
+  PencilSquareIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
@@ -102,10 +103,44 @@ function PostCard({ post, token, onChanged }) {
   const [err, setErr] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [confirmOverride, setConfirmOverride] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({ title: "", description: "", content: "" });
 
   const { words, readTime } = readTimeOf(post.content);
   const markers = markersOf(post.content);
   const isDraft = post.status === "draft";
+
+  function startEdit() {
+    setForm({ title: post.title || "", description: post.description || "", content: post.content || "" });
+    setErr(null);
+    setEditing(true);
+    setOpen(false);
+  }
+
+  async function save() {
+    setSaving(true); setErr(null);
+    try {
+      const res = await fetch(`${BACKEND_URL}/admin/posts/${post.slug}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(form),
+      });
+      if (res.status === 401) { onChanged("unauth"); return; }
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        throw new Error(d.message || `HTTP ${res.status}`);
+      }
+      setEditing(false);
+      onChanged();
+    } catch (e) {
+      setErr(e.message || "Save failed");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  const editMarkers = markersOf(form.content);
 
   const call = useCallback(
     async (method, path) => {
@@ -200,12 +235,65 @@ function PostCard({ post, token, onChanged }) {
           </button>
         )}
 
+        <button onClick={startEdit} disabled={busy}
+          className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 px-4 py-2 text-sm text-gray-300 hover:border-secondary-500 transition disabled:opacity-40">
+          <PencilSquareIcon className="h-4 w-4" /> Edit
+        </button>
+
         <button onClick={() => setOpen((o) => !o)}
           className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 px-4 py-2 text-sm text-gray-300 hover:border-secondary-500 transition">
           {open ? <EyeSlashIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
           {open ? "Hide preview" : "Preview"}
         </button>
       </div>
+
+      {editing && (
+        <div className="mt-4 rounded-lg border border-zinc-800 bg-black/40 p-4 space-y-3">
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Title</label>
+            <input
+              value={form.title}
+              onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+              className="w-full rounded-md bg-zinc-900 border border-zinc-800 px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">Description</label>
+            <input
+              value={form.description}
+              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              className="w-full rounded-md bg-zinc-900 border border-zinc-800 px-3 py-2 text-sm text-white focus:outline-none focus:border-secondary-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-400 mb-1">
+              Content (markdown){" "}
+              {editMarkers.length > 0 ? (
+                <span className="text-amber-400">· {editMarkers.length} [AUTHOR:] marker{editMarkers.length === 1 ? "" : "s"} left</span>
+              ) : (
+                <span className="text-emerald-400">· no markers left</span>
+              )}
+            </label>
+            <textarea
+              value={form.content}
+              onChange={(e) => setForm((f) => ({ ...f, content: e.target.value }))}
+              spellCheck={false}
+              rows={18}
+              className="w-full rounded-md bg-zinc-900 border border-zinc-800 px-3 py-2 text-sm text-gray-100 font-mono leading-relaxed focus:outline-none focus:border-secondary-500"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={save} disabled={saving}
+              className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary-400 to-secondary-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-40 hover:opacity-90 transition">
+              {saving ? "Saving…" : "Save changes"}
+            </button>
+            <button onClick={() => setEditing(false)} disabled={saving}
+              className="rounded-full border border-zinc-700 px-4 py-2 text-sm text-gray-300 hover:border-zinc-500 disabled:opacity-40">
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
 
       {markers.length > 0 && confirmOverride && isDraft && (
         <div className="mt-3 rounded-lg border border-amber-700/60 bg-amber-950/20 p-3">
