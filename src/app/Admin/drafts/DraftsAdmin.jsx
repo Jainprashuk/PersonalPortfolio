@@ -28,50 +28,28 @@ const formatDate = (d) =>
 // ---------- Login ----------
 
 function Login({ onAuthed }) {
-  const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [step, setStep] = useState("email"); // 'email' | 'otp'
+  const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [msg, setMsg] = useState(null);
   const [err, setErr] = useState(null);
 
-  async function requestOtp(e) {
-    e.preventDefault();
-    setBusy(true); setErr(null); setMsg(null);
-    try {
-      const res = await fetch(`${BACKEND_URL}/admin/login/request-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-      if (!res.ok) throw new Error();
-      setStep("otp");
-      setMsg("If that address is an admin, an OTP has been emailed. Enter it below.");
-    } catch {
-      setErr("Could not request an OTP. Try again.");
-    } finally {
-      setBusy(false);
-    }
-  }
-
-  async function verify(e) {
+  async function submit(e) {
     e.preventDefault();
     setBusy(true); setErr(null);
     try {
-      const res = await fetch(`${BACKEND_URL}/admin/login/verify-otp`, {
+      const res = await fetch(`${BACKEND_URL}/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ password }),
       });
-      const data = await res.json();
-      if (res.ok && data.verified && data.token) {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.token) {
         try { localStorage.setItem(TOKEN_KEY, data.token); } catch { /* ignore */ }
         onAuthed(data.token);
         return;
       }
-      setErr(data.error || "Invalid or expired OTP.");
+      setErr(data.error || "Incorrect password.");
     } catch {
-      setErr("Verification failed. Try again.");
+      setErr("Login failed. Try again.");
     } finally {
       setBusy(false);
     }
@@ -87,35 +65,20 @@ function Login({ onAuthed }) {
           </span>
         </h1>
 
-        <form onSubmit={step === "email" ? requestOtp : verify} className="space-y-4">
+        <form onSubmit={submit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-400 mb-1">Admin email</label>
+            <label className="block text-sm text-gray-400 mb-1">Admin password</label>
             <input
-              type="email"
+              type="password"
               required
-              value={email}
-              disabled={step === "otp"}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-secondary-500 disabled:opacity-60"
+              autoFocus
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="w-full rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-secondary-500"
             />
           </div>
 
-          {step === "otp" && (
-            <div>
-              <label className="block text-sm text-gray-400 mb-1">6-digit OTP</label>
-              <input
-                inputMode="numeric"
-                required
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                placeholder="123456"
-                className="w-full rounded-lg bg-zinc-900 border border-zinc-800 px-3 py-2.5 text-sm text-white tracking-widest placeholder-gray-500 focus:outline-none focus:border-secondary-500"
-              />
-            </div>
-          )}
-
-          {msg && <p className="text-xs text-emerald-400">{msg}</p>}
           {err && <p className="text-xs text-red-400">{err}</p>}
 
           <button
@@ -123,18 +86,8 @@ function Login({ onAuthed }) {
             disabled={busy}
             className="w-full rounded-full bg-gradient-to-r from-primary-400 to-secondary-600 px-4 py-2.5 text-sm font-medium text-white disabled:opacity-40 hover:opacity-90 transition"
           >
-            {busy ? "Please wait…" : step === "email" ? "Send OTP" : "Verify & sign in"}
+            {busy ? "Signing in…" : "Sign in"}
           </button>
-
-          {step === "otp" && (
-            <button
-              type="button"
-              onClick={() => { setStep("email"); setOtp(""); setErr(null); setMsg(null); }}
-              className="w-full text-xs text-gray-400 hover:text-gray-200"
-            >
-              ← Use a different email
-            </button>
-          )}
         </form>
       </div>
     </div>
