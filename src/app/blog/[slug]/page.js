@@ -1,13 +1,16 @@
-import fs from "fs";
-import path from "path";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import MarkdownRenderer from "../../components/MarkdownRenderer";
-import { ReadingProgress, CopyLinkButton } from "../../components/BlogPostExtras";
-import { safeMatter, estimateReadTime } from "../../lib/blog";
+import { ReadingProgress } from "../../components/BlogPostExtras";
+import LikeButton from "../../components/LikeButton";
+import ShareButton from "../../components/ShareButton";
+import { estimateReadTime } from "../../lib/blog";
+import { BACKEND_URL } from "../../lib/backend";
+
+export const dynamic = "force-dynamic";
 
 const navLinks = [
   { title: "Home", path: "/" },
@@ -17,37 +20,45 @@ const navLinks = [
   { title: "Blogs", path: "/blog" },
 ];
 
-export default function BlogPost({ params }) {
+async function getPost(slug) {
+  try {
+    const res = await fetch(`${BACKEND_URL}/posts/${encodeURIComponent(slug)}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
 
-  const blogDir = path.join(process.cwd(), "blogs");
-  const filePath = path.join(blogDir, `${params.slug}.md`);
+async function getOrdered() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/posts`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const posts = await res.json();
+    return Array.isArray(posts) ? posts : [];
+  } catch {
+    return [];
+  }
+}
 
-  // The post may not exist (unpublished/deleted, or blogs/ empty). Render the
-  // 404 page instead of letting readFileSync throw.
-  if (!fs.existsSync(filePath)) {
+export default async function BlogPost({ params }) {
+  const post = await getPost(params.slug);
+  if (!post) {
     notFound();
   }
 
-  const fileContent = fs.readFileSync(filePath, "utf-8");
-
-  const { content, data } = safeMatter(fileContent, params.slug);
+  const content = post.content || "";
   const readTime = estimateReadTime(content);
 
-  const files = fs.existsSync(blogDir)
-    ? fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"))
-    : [];
-  const ordered = files
-    .map((file) => {
-      const slug = file.replace(".md", "");
-      const raw = fs.readFileSync(path.join(blogDir, file), "utf-8");
-      const { data } = safeMatter(raw, slug);
-      return { slug, title: data.title || slug.replaceAll("-", " "), date: data.date || null };
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
+  const ordered = await getOrdered();
   const currentIndex = ordered.findIndex((b) => b.slug === params.slug);
   const newer = currentIndex > 0 ? ordered[currentIndex - 1] : null;
-  const older = currentIndex >= 0 && currentIndex < ordered.length - 1 ? ordered[currentIndex + 1] : null;
+  const older =
+    currentIndex >= 0 && currentIndex < ordered.length - 1
+      ? ordered[currentIndex + 1]
+      : null;
 
   return (
     <>
@@ -66,21 +77,22 @@ export default function BlogPost({ params }) {
           </Link>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
-            {data.title}
+            {post.title}
           </h1>
 
           <div className="flex flex-wrap items-center gap-4 text-gray-400 dark:text-gray-600 mb-8 text-sm">
-            {data.date && (
+            {post.date && (
               <span className="inline-flex items-center gap-1.5">
                 <CalendarIcon className="h-4 w-4" />
-                {new Date(data.date).toDateString()}
+                {new Date(post.date).toDateString()}
               </span>
             )}
             <span className="inline-flex items-center gap-1.5">
               <ClockIcon className="h-4 w-4" />
               {readTime} min read
             </span>
-            <CopyLinkButton />
+            <LikeButton slug={params.slug} />
+            <ShareButton title={post.title} />
           </div>
 
           <div className="h-px bg-zinc-800 dark:bg-gray-200 mb-10"></div>

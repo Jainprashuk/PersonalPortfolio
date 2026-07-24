@@ -11,6 +11,11 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY
 });
 
+// Posts are stored in the backend (MongoDB) now. Generated posts are POSTed
+// there as drafts; a human approves them via /Admin/drafts.
+const BACKEND_URL = process.env.BACKEND_URL || "https://portfolio-backend-two-zeta.vercel.app";
+const ADMIN_KEY = process.env.ADMIN_KEY || process.env.ADMIN_SECRET;
+
 
 // 🔥 fallback topics (safe + high quality)
 const fallbackTopics = [
@@ -31,18 +36,20 @@ function slugify(title) {
 }
 
 
-// 🔥 existing posts — check BOTH published (blogs/) and pending (drafts/) so we
-// don't regenerate a topic that's already written or waiting for review.
-function getExistingSlugs(){
-  const dirs = ["blogs", "drafts"];
-  const slugs = new Set();
-  for (const dir of dirs) {
-    if (!fs.existsSync(dir)) continue;
-    for (const file of fs.readdirSync(dir)) {
-      if (file.endsWith(".md")) slugs.add(file.replace(".md", ""));
-    }
+// 🔥 existing posts — ask the backend for every slug (draft + published) so we
+// don't regenerate a topic that already exists or is waiting for review.
+async function getExistingSlugs(){
+  if (!ADMIN_KEY) return [];
+  try {
+    const res = await fetch(`${BACKEND_URL}/admin/posts`, {
+      headers: { "x-admin-key": ADMIN_KEY },
+    });
+    if (!res.ok) return [];
+    const posts = await res.json();
+    return Array.isArray(posts) ? posts.map((p) => p.slug) : [];
+  } catch {
+    return [];
   }
-  return [...slugs];
 }
 
 
@@ -93,7 +100,7 @@ Return ONLY a JSON array.
 // 🔥 pick topic (smart + no duplicate)
 async function getTopic(){
 
-  const existing = getExistingSlugs();
+  const existing = await getExistingSlugs();
 
   const useAI = Math.random() < 0.7;
 
@@ -168,9 +175,15 @@ async function generateBlog() {
 
   const slug = slugify(topic);
 
-  // Skip if the topic already exists as a published post OR a pending draft.
-  if (fs.existsSync(`blogs/${slug}.md`) || fs.existsSync(`drafts/${slug}.md`)) {
-    console.log("Post already exists (blogs/ or drafts/), skipping...");
+  if (!ADMIN_KEY) {
+    console.error("ADMIN_KEY (backend ADMIN_SECRET) is not set. Cannot post draft.");
+    process.exit(1);
+  }
+
+  // Skip if the topic already exists in the backend (draft or published).
+  const existingSlugs = await getExistingSlugs();
+  if (existingSlugs.includes(slug)) {
+    console.log("Post already exists in backend, skipping...");
     return;
   }
 
@@ -201,14 +214,15 @@ Topic:
 Guidelines:
 
 - Conversational tone
-- Use real-world thinking
-- Add lines like:
-  "In one of my projects..."
-  "I ran into this issue when..."
-  "What worked for me was..."
+- Explain concepts clearly with concrete, technically accurate detail
+- Do NOT invent personal anecdotes, projects, company names, teammates, or
+  benchmark numbers. Never fabricate first-person experience.
+- Where a real personal example or a real metric would strengthen the post,
+  insert a placeholder marker on its own line instead of making one up, e.g.
+  "[AUTHOR: add a real example from your work here]" or
+  "[AUTHOR: insert a real measured number]". A human fills these in during review.
 - Avoid robotic tone
-- Slight imperfections are OK
-- Add opinions
+- Add opinions where they are genuinely defensible
 
 Structure:
 
@@ -228,28 +242,30 @@ Formatting:
 
   const content = await generateBlogContent(prompt);
 
-  // JSON.stringify quotes and escapes the value so a colon (or quote) in the
-  // topic can't break YAML frontmatter parsing downstream.
-  // Generated posts land in drafts/ as unpublished; a human approves them into
-  // blogs/ via `npm run drafts` or the /Admin/drafts review UI.
-  const markdown = `---
-title: ${JSON.stringify(topic)}
-date: ${new Date().toISOString()}
-description: ${JSON.stringify(`Blog about ${topic}`)}
-status: draft
-aiAssisted: true
----
+  // Store the draft in the backend. It lands as status:draft (unpublished);
+  // a human approves it into publication via /Admin/drafts.
+  const res = await fetch(`${BACKEND_URL}/admin/posts`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "x-admin-key": ADMIN_KEY },
+    body: JSON.stringify({
+      slug,
+      title: topic,
+      description: `Blog about ${topic}`,
+      content,
+      date: new Date().toISOString(),
+      aiAssisted: true,
+    }),
+  });
 
-${content}
-`;
-
-  if (!fs.existsSync("drafts")) {
-    fs.mkdirSync("drafts");
+  if (res.status === 201) {
+    console.log("✅ Draft saved to backend:", slug);
+  } else if (res.status === 409) {
+    console.log("Draft already exists in backend, skipping:", slug);
+  } else {
+    const text = await res.text().catch(() => "");
+    console.error(`Failed to save draft (HTTP ${res.status}): ${text.slice(0, 200)}`);
+    process.exit(1);
   }
-
-  fs.writeFileSync(`drafts/${slug}.md`, markdown);
-
-  console.log("✅ Draft saved:", slug);
 }
 
 

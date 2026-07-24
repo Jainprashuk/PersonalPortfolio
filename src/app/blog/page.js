@@ -1,33 +1,35 @@
-import fs from "fs";
-import path from "path";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import BlogList from "../components/BlogList";
-import { safeMatter, estimateReadTime } from "../lib/blog";
+import { BACKEND_URL } from "../lib/backend";
 
-export default function BlogPage() {
+// Posts live in the backend (MongoDB) now, so this page is dynamic.
+export const dynamic = "force-dynamic";
 
-  const blogDir = path.join(process.cwd(), "blogs");
+async function getPublishedPosts() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/posts`, { cache: "no-store" });
+    if (!res.ok) return [];
+    const posts = await res.json();
+    return Array.isArray(posts) ? posts : [];
+  } catch {
+    // Backend unreachable — render an empty state rather than crashing the build.
+    return [];
+  }
+}
 
-  // blogs/ may be missing (only .gitkeep) once every post has moved to drafts/.
-  // Guard readdirSync so the production build doesn't crash on an empty dir.
-  const files = fs.existsSync(blogDir)
-    ? fs.readdirSync(blogDir).filter((file) => file.endsWith(".md"))
-    : [];
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
 
-  const blogs = files.map((file) => {
-    const slug = file.replace(".md", "");
-    const fileContent = fs.readFileSync(path.join(blogDir, file), "utf-8");
-    const { content, data } = safeMatter(fileContent, slug);
-
-    return {
-      slug,
-      title: data.title || slug.replaceAll("-", " "),
-      description: data.description || `Read this developer blog about ${slug.replaceAll("-", " ")}`,
-      date: data.date || null,
-      readTime: estimateReadTime(content),
-    };
-  }).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const blogs = posts.map((p) => ({
+    slug: p.slug,
+    title: p.title || p.slug?.replaceAll("-", " "),
+    description:
+      p.description ||
+      `Read this developer blog about ${p.slug?.replaceAll("-", " ")}`,
+    date: p.date || null,
+    readTime: p.readTime || 1,
+  }));
 
   const navLinks = [
     { title: "Home", path: "/" },

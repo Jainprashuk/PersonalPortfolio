@@ -9,15 +9,9 @@ jobs:
   generate-blog:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-      pull-requests: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -27,31 +21,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The generator POSTs a new draft straight to the backend (MongoDB) as
+      # status:draft. Nothing is committed to the repo and nothing is published
+      # until a human approves it at /Admin/drafts. No repo write access needed.
       - name: Generate draft
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
         run: node scripts/generateBlog.js
-
-      # The generator writes to drafts/. Instead of pushing to main, open a PR
-      # so a human reviews (and approves via /Admin/drafts or `npm run drafts`)
-      # before anything is published.
-      - name: Open pull request with new draft
-        uses: peter-evans/create-pull-request@v6
-        with:
-          add-paths: drafts/**
-          branch: auto-blog/draft
-          delete-branch: true
-          commit-message: "Auto-generated draft"
-          title: "New auto-generated blog draft"
-          body: |
-            A new draft was generated and placed in `drafts/`.
-
-            Review it before publishing:
-            - locally with `npm run dev` → open `/Admin/drafts`, or
-            - `npm run drafts` to list / `npm run publish-post <slug>` to publish.
-
-            Merging this PR only lands the **draft** — it does not publish the post.
-          labels: |
-            blog
-            auto-generated

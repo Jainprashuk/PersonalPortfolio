@@ -1,9 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { MagnifyingGlassIcon, ClockIcon, CalendarIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import LikeButton from "./LikeButton";
+import ShareButton from "./ShareButton";
+import { BACKEND_URL } from "../lib/backend";
 
 const PAGE_SIZE = 9;
 
@@ -16,17 +19,18 @@ function formatDate(date) {
   });
 }
 
-function BlogCard({ blog, featured = false }) {
+function BlogCard({ blog, featured = false, likeCount = null }) {
+  // The card is a container (not itself a link) so the like/share controls
+  // aren't nested inside an anchor. The title/body area links to the post.
   return (
-    <Link
-      href={`/blog/${blog.slug}`}
+    <div
       className={`group relative flex flex-col justify-between overflow-hidden rounded-xl border border-zinc-800 dark:border-gray-200 bg-zinc-900 dark:bg-gray-100 p-6 transition hover:border-secondary-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-secondary-500/10 ${
         featured ? "sm:col-span-2 lg:col-span-2" : ""
       }`}
     >
       <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary-400 to-secondary-600 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-      <div>
+      <Link href={`/blog/${blog.slug}`} className="block">
         <div className="flex flex-wrap items-center gap-3 text-xs text-gray-400 dark:text-gray-600 mb-3">
           {blog.date && (
             <span className="inline-flex items-center gap-1">
@@ -51,19 +55,46 @@ function BlogCard({ blog, featured = false }) {
         <p className="text-gray-400 dark:text-gray-600 text-sm line-clamp-3">
           {blog.description}
         </p>
-      </div>
+      </Link>
 
-      <div className="mt-4 inline-flex items-center gap-1 text-pink-400 dark:text-pink-500 text-sm font-medium">
-        Read Article
-        <span className="transition-transform group-hover:translate-x-1">→</span>
+      <div className="mt-4 flex items-center justify-between border-t border-zinc-800/70 dark:border-gray-200 pt-3">
+        <LikeButton slug={blog.slug} initialCount={likeCount} />
+        <div className="flex items-center gap-4">
+          <ShareButton title={blog.title} url={`/blog/${blog.slug}`} />
+          <Link
+            href={`/blog/${blog.slug}`}
+            className="inline-flex items-center gap-1 text-pink-400 dark:text-pink-500 text-sm font-medium"
+          >
+            Read
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
 export default function BlogList({ blogs }) {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [likes, setLikes] = useState(null); // { slug: count } once loaded
+
+  // One request for every card's count, instead of one per card.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${BACKEND_URL}/likes`)
+      .then((r) => r.json())
+      .then((rows) => {
+        if (cancelled || !Array.isArray(rows)) return;
+        const map = {};
+        for (const row of rows) map[row.slug] = row.count;
+        setLikes(map);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -114,9 +145,19 @@ export default function BlogList({ blogs }) {
             transition={{ duration: 0.25 }}
           >
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featured && <BlogCard blog={featured} featured />}
+              {featured && (
+                <BlogCard
+                  blog={featured}
+                  featured
+                  likeCount={likes ? likes[featured.slug] || 0 : null}
+                />
+              )}
               {paged.map((blog) => (
-                <BlogCard key={blog.slug} blog={blog} />
+                <BlogCard
+                  key={blog.slug}
+                  blog={blog}
+                  likeCount={likes ? likes[blog.slug] || 0 : null}
+                />
               ))}
             </div>
 
