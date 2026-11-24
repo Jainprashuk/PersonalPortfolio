@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { toast } from 'react-hot-toast';
+import { BACKEND_URL } from "../lib/backend";
 
 const EmailSection = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ const EmailSection = () => {
 
 
       try {
-        const response = await fetch("https://portfolio-backend-two-zeta.vercel.app/submit", {
+        const response = await fetch(`${BACKEND_URL}/submit`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -22,6 +22,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import dynamic from 'next/dynamic';
+import { BACKEND_URL } from "../lib/backend";
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 const MapChart = dynamic(() => import('./MapChart'), { ssr: false });
@@ -59,7 +60,7 @@ const Insights = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get("https://portfolio-backend-two-zeta.vercel.app/visit")
+      .get(`${BACKEND_URL}/visit`)
       .then((response) => {
         setVisits(response.data);
         setLoading(false);

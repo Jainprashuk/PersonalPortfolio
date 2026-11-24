@@ -5,13 +5,14 @@ import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Navbar from "./main/Navbar";
+import { BACKEND_URL } from "../../lib/backend";
 
 const UserHome = () => {
   const [formdata, setdata] = useState([]);
 
   useEffect(() => {
     axios
-      .get("https://portfolio-backend-two-zeta.vercel.app/getdata")
+      .get(`${BACKEND_URL}/getdata`)
       .then((response) => {
         setdata(response.data);
       })

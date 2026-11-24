@@ -6,6 +6,7 @@ import HeroSection from "./components/HeroSection";
 import Navbar from "./components/Navbar";
 import AboutSection from "./components/AboutSection";
 import { useState, useEffect } from "react";
+import { BACKEND_URL } from "./lib/backend";
 
 // Below-the-fold sections are code-split so the initial bundle only
 // contains what's needed to render the hero/nav/about above the fold.
@@ -71,7 +72,7 @@ export default function Home() {
 
     // Send visit data to the backend
     try {
-      const response = await fetch('https://portfolio-backend-two-zeta.vercel.app/visit', {
+      const response = await fetch(`${BACKEND_URL}/visit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
